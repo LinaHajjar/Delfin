@@ -1,4 +1,4 @@
-package Dolphine;
+package dolphine;
 
 import java.time.LocalDate;
 
@@ -14,4 +14,5 @@ public class Result {
         this.dateOfResult=dateOfResult;
         this.swimDiscipline=swimDiscipline;
     }
+
 }

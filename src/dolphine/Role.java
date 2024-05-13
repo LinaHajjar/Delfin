@@ -1,4 +1,4 @@
-package Dolphine;
+package dolphine;
 
 public enum Role {
     ADMIN,
@@ -6,5 +6,5 @@ public enum Role {
     CASHIER,
     SWIMMEMBER,
     CHAIRMAN,
-    MANAGEMENT
+    MANAGEMENT,
 }
