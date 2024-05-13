@@ -1,4 +1,4 @@
-package Dolphine;
+package dolphine;
 
 public enum SwimDiscipline {
     BUTTERFLY,

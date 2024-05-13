@@ -1,4 +1,4 @@
-package Dolphine;
+package dolphine;
 
 import java.util.ArrayList;
 
