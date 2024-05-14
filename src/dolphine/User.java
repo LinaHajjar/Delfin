@@ -8,8 +8,7 @@ public class User {
     private LocalDate dateOfBirth;
     private Role role;
 
-    public User (String id, String name, LocalDate dateOfBirth, Role role){
-        this.id=id;
+    public User (String name, LocalDate dateOfBirth, Role role){
         this.name=name;
         this.dateOfBirth=dateOfBirth;
         this.role=role;
