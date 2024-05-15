@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class CompetitionMember extends Member{
     private ArrayList<SwimDiscipline> disciplineList;
 
-    public CompetitionMember (String id, String name, LocalDate dateOfBirth, Role role, boolean isActive, MemberType memberType, ArrayList<SwimDiscipline> disciplineList){
-        super (id,name,dateOfBirth,role,isActive, memberType);
+    public CompetitionMember (String id, String name, LocalDate dateOfBirth, Role role, boolean isActive, MemberType memberType, boolean hasPaidSubscription, ArrayList<SwimDiscipline> disciplineList){
+        super (id,name,dateOfBirth,role,isActive, memberType,hasPaidSubscription);
         this.disciplineList=disciplineList;
     }
 

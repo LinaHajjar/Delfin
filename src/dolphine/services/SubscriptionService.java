@@ -21,43 +21,64 @@ public class SubscriptionService {
         this.seasonStartDate = calculateNextFirstOfAugust();
     }
 
-    public double calculateSubcriptionFee(Member member){
-        if (member.isActive()){
+    public double calculateSubscriptionFee(Member member) {
+        if (!member.getIsActive()) {
+            // Inactive subscription fee
             return inActiveMemberFee;
-        } else if (member.getMemberType() == MemberType.JUNIOR) {
+        } else if (member.getMemberType().equals(MemberType.JUNIOR)) {
+            // Junior member fee discount
             return baseMemberFee - juniorMemberFeeDiscount;
-        } else if (member.getMemberType().equals(MemberType.SENIOR) && member.getAge() >= seniorBreakPointAge){
-            return baseMemberFee * (100 - aboveSeniorBreakpointMemberFeeDiscountProcentage);
+        } else if (member.getAge() > seniorBreakPointAge) {
+            // Above senior member fee discount
+            return baseMemberFee * (100 - aboveSeniorBreakpointMemberFeeDiscountProcentage) / 100;
         } else {
+            // Base subscription fee
             return baseMemberFee;
         }
     }
 
-    public double calculateSubcriptionFee(Member member){
-        if (member.isActive()){
+    // TODO Create calculate subscription left for season.
+
+    public double calculateSubscriptionFeeAtNextSeason(Member member) {
+        if (!member.getIsActive()) {
+            // Inactive subscription fee
             return inActiveMemberFee;
-        } else if (member.getMemberType() == MemberType.JUNIOR) {
+        } else if (member.getMemberType().equals(MemberType.JUNIOR) && !(member.getAge() == juniorBreakPointAge - 1 && birthDayBeforeSeasonStart(member.getDateOfBirth()))) {
+            // Junior member fee discount given to members that are not juniorBreakPointAge at the seasonStartDate
             return baseMemberFee - juniorMemberFeeDiscount;
-        } else if (member.getMemberType().equals(MemberType.SENIOR) && member.getAge() >= seniorBreakPointAge){
-            return baseMemberFee * (100 - aboveSeniorBreakpointMemberFeeDiscountProcentage);
+        } else if (member.getAge() > seniorBreakPointAge || member.getAge() == seniorBreakPointAge && birthDayBeforeSeasonStart(member.getDateOfBirth())) {
+            // Above senior member fee discount given to members that are not above seniorBreakPointAge at the seasonStartDate
+            return baseMemberFee * (100 - aboveSeniorBreakpointMemberFeeDiscountProcentage) / 100;
         } else {
+            // Base subscription fee
             return baseMemberFee;
         }
     }
 
-    public String generateSubscriptionReport(ArrayList<Member> memberList){
+    public String generateSubscriptionReport(ArrayList<Member> memberList) {
         StringBuilder subscriptionReport = new StringBuilder();
         subscriptionReport.append("Subscription Report:\n");
         subscriptionReport.append(String.format("There are currently a total of %d members\n", memberList.size()));
+        double totalSubscriptionFee = 0;
         for (Member member : memberList) {
-            if ((member.getAge() == seniorBreakPointAge - 1 || member.getAge() == juniorBreakPointAge) && seasonStartDate.isAfter(member.getDateOfBirth())){
-                //TODO find out how to calculate the fee when the age is +1
-            }
+            double subscriptionFee = calculateSubscriptionFeeAtNextSeason(member);
+            totalSubscriptionFee += subscriptionFee;
         }
+        subscriptionReport.append(String.format("Total subscription fee at next season start: %.2f\n", totalSubscriptionFee));
         return subscriptionReport.toString();
     }
 
-    private LocalDate calculateNextFirstOfAugust(){
+    public ArrayList<Member> getMembersWithUnpaidSubscription(ArrayList<Member> memberList) {
+        ArrayList<Member> membersWithUnpaidSubscription = new ArrayList<>();
+        for (Member member : memberList) {
+            if (!member.isHasPaidSubscription()){
+                membersWithUnpaidSubscription.add(member);
+            }
+        }
+        return membersWithUnpaidSubscription;
+    }
+
+    private LocalDate calculateNextFirstOfAugust() {
         LocalDate currentDate = LocalDate.now();
         LocalDate nextFirstOfAugust;
 
@@ -70,5 +91,49 @@ public class SubscriptionService {
             nextFirstOfAugust = currentDate.withMonth(8).withDayOfMonth(1);
         }
         return nextFirstOfAugust;
+    }
+
+    private boolean birthDayBeforeSeasonStart(LocalDate birthday) {
+        int birthdayMonth = birthday.getMonthValue();
+        int birthdayDay = birthday.getDayOfMonth();
+        int seasonStartMonth = seasonStartDate.getMonthValue();
+        int seasonStartDay = seasonStartDate.getDayOfMonth();
+
+        if (birthdayMonth < seasonStartMonth) {
+            return true;  // Birthday month is earlier
+        } else if (birthdayMonth > seasonStartMonth) {
+            return false;  // Birthday month is later
+        } else {
+            // Months are the same, compare days
+            return birthdayDay < seasonStartDay;
+        }
+    }
+
+    public double getInActiveMemberFee() {
+        return inActiveMemberFee;
+    }
+
+    public double getBaseMemberFee() {
+        return baseMemberFee;
+    }
+
+    public double getJuniorMemberFeeDiscount() {
+        return juniorMemberFeeDiscount;
+    }
+
+    public double getAboveSeniorBreakpointMemberFeeDiscountProcentage() {
+        return aboveSeniorBreakpointMemberFeeDiscountProcentage;
+    }
+
+    public int getSeniorBreakPointAge() {
+        return seniorBreakPointAge;
+    }
+
+    public int getJuniorBreakPointAge() {
+        return juniorBreakPointAge;
+    }
+
+    public LocalDate getSeasonStartDate() {
+        return seasonStartDate;
     }
 }
