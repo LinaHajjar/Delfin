@@ -387,6 +387,7 @@ public class UserInputUtil {
     public static <T> T selectObject(List<T> objects) {
         if (objects.isEmpty()){
             return null;
+
         }
         // Print the list of objects with numbers
         for (int i = 0; i < objects.size(); i++) {
