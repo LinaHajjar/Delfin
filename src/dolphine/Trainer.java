@@ -11,7 +11,21 @@ public class Trainer extends User{
     }
 
     public Trainer(User user, int seniority){
-        super(user.getId(),user.getName(),user.getLocalDate,user.getRole());
+        super(user.getId(),user.getName(),user.getDateOfBirth(),user.getRole());
+        this.seniority = seniority;
+    }
+
+    @Override
+    public String toString(){
+        return super.toString() +
+                "Senority: " + getSeniority() + "\n";
+    }
+
+    public int getSeniority() {
+        return seniority;
+    }
+
+    public void setSeniority(int seniority) {
         this.seniority = seniority;
     }
 }

@@ -14,4 +14,20 @@ public class User {
         this.dateOfBirth=dateOfBirth;
         this.role=role;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public Role getRole() {
+        return role;
+    }
 }
