@@ -10,13 +10,15 @@ public class SwimCompetition {
     private String location;
     private ArrayList<SwimDiscipline> swimDiscipline;
     private ArrayList<Member> swimMemberList;
+    private String category;
 
-    public SwimCompetition(LocalDate date, String competitionName, String location) {
-        this.date = date;
+    public SwimCompetition(String date, String competitionName, String location, LocalDate localDate) {
+        this.date = LocalDate.parse(date);
         this.competitionName = competitionName;
         this.location = location;
         this.swimDiscipline = new ArrayList<>();
         this.swimMemberList = new ArrayList<>();
+        this.category = category;
     }
 
     public void addSwimDiscipline(SwimDiscipline discipline) {
@@ -25,10 +27,14 @@ public class SwimCompetition {
 
     public void registerMember(Member member) {
         swimMemberList.add(member);
+
     }
 
         public static SwimCompetition opretKonkurrence() {
             Scanner scanner = new Scanner(System.in);
+
+            System.out.println("➤ Enter competition category (Junior/Senior):");
+            String category = scanner.nextLine();
             System.out.println(" ➤ Enter the competetion name");
             String name = scanner.nextLine();
             System.out.println("➤ Enter competition location:");
@@ -36,7 +42,7 @@ public class SwimCompetition {
             System.out.println("➤ Enter competition date (YYYY-MM-DD):");
             LocalDate date = LocalDate.parse(scanner.nextLine());
 
-            SwimCompetition competition = new SwimCompetition(date, name, location);
+            SwimCompetition competition = new SwimCompetition(category, name, location, date);
 
             System.out.println("Enter swim disciplines for the competition (enter 'done' when finished):");
             while (true) {
@@ -61,17 +67,34 @@ public class SwimCompetition {
                 if (id.equalsIgnoreCase("done")) {
                     break;
                 }
-                // tager navn som parameter
-                Member participant = new Member(id);
-                competition.registerMember(Member member);
+
             }
 
             scanner.close();
             return competition;
         }
 
+    // Getters for at udskrive konkurrenceoplysninger (valgfrit)
+    public String getCompetitionName() {
+        return competitionName;
+    }
 
-        public static void tilmeldKonkurrence {
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public ArrayList<SwimDiscipline> getSwimDisciplines() {
+        return swimDiscipline;
+    }
+
+    public ArrayList<Member> getParticipants() {
+        return swimMemberList;
+
+
 
         }
 
