@@ -24,7 +24,7 @@ public class MainMenu {
                     System.out.println("you chose option 3");
                     break;
                 case 4:
-                    System.out.println("you chose option 4");
+                    SubscriptionUI.subscriptionMenu();
                     break;
 
             }//end switch

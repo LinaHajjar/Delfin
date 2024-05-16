@@ -2,6 +2,7 @@ package dolphine.services;
 
 import dolphine.Member;
 import dolphine.MemberType;
+import dolphine.Subscription;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -68,14 +69,15 @@ public class SubscriptionService {
         return subscriptionReport.toString();
     }
 
-    public ArrayList<Member> getMembersWithUnpaidSubscription(ArrayList<Member> memberList) {
-        ArrayList<Member> membersWithUnpaidSubscription = new ArrayList<>();
-        for (Member member : memberList) {
-            if (!member.isHasPaidSubscription()){
-                membersWithUnpaidSubscription.add(member);
+    public ArrayList<Subscription> getUnpaidSubscriptionList(ArrayList<Subscription> subscriptionList) {
+        ArrayList<Subscription> unpaidSubscriptions = new ArrayList<>();
+        for (Subscription subscription : subscriptionList) {
+            if (!subscription.isPayed() && subscription.getDueDate().isBefore(LocalDate.now())){
+                // Unpaid subscription with a past due date
+                unpaidSubscriptions.add(subscription);
             }
         }
-        return membersWithUnpaidSubscription;
+        return unpaidSubscriptions;
     }
 
     private LocalDate calculateNextFirstOfAugust() {

@@ -385,7 +385,7 @@ public class UserInputUtil {
      * @return The selected object.
      */
     public static <T> T selectObject(List<T> objects) {
-        if (objects.isEmpty()){
+        if (objects.isEmpty()) {
             return null;
         }
         // Print the list of objects with numbers
@@ -450,11 +450,11 @@ public class UserInputUtil {
     public static LocalDate getLocalDateInput(DateTimeFormatter dateFormatter) {
         LocalDate date = null;
         do {
-            String inputDate = getStringInput("Enter a date (yyyy-MM-dd): ");
+            String inputDate = getStringInput("Enter a date " + dateFormatter.toString() + ": ");
             try {
                 date = LocalDate.parse(inputDate, dateFormatter);
             } catch (Exception e) {
-                System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
+                System.out.println("Invalid date format. Please enter date in " + dateFormatter.toString() + " format.");
             }
         } while (date == null);
         return date;
