@@ -2,6 +2,7 @@ package dolphine.ui;
 import dolphine.Member;
 import dolphine.MemberType;
 import dolphine.util.UserInputUtil;
+import dolphine.repository.MemberRepository;
 
 import java.util.Scanner;
 import static dolphine.ui.MainMenu.HovedMenu;
