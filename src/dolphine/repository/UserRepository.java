@@ -38,30 +38,23 @@ public class UserRepository {
     }
 
     public static ArrayList<User> getUserList() {
-        ArrayList<User> userList = new ArrayList<>();
         try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
-            while (true) {
-                try {
-                    User user = (User) ois.readObject(); // Deserialize a Member object from the file
-                    userList.add(user); // Add the deserialized object to the ArrayList
-                } catch (EOFException e) {
-                    // End of file reached, break out of the loop
-                    break;
-                }
-            }
-        } catch (IOException | ClassNotFoundException e) {
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filePath));
+            ArrayList<User> loadedUsers = (ArrayList<User>) objectInputStream.readObject();
+            System.out.println("Users loaded from userFile.txt:"); //TODO slettes når vi er sikrer på virker
+            return loadedUsers;
+        } catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
+            System.out.println("Couldn't load Users from userFile.txt"); //TODO slettes bare når vi er sikre på virker
+            return null;
         }
-        return userList; // Return the list of deserialized Member objects
     }
 
     public static void saveUserList(ArrayList<User> userList) {
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath, true));
-            for (User u : userList) {
-                oos.writeObject(u); // Serialize each Member object and write to the file
-            }
+        try  {
+            ObjectOutputStream outPutStream = new ObjectOutputStream(new FileOutputStream(filePath));
+            outPutStream.writeObject(userList);
+            System.out.println("User's saved to userFile.txt"); //TODO slet når det virker
         } catch (IOException e) {
             e.printStackTrace();
         }
