@@ -1,22 +1,23 @@
 package dolphine;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class User {
+public class User implements Serializable {
     private String id;
     private String name;
     private LocalDate dateOfBirth;
     private Role role;
 
-    ArrayList<User> users =new ArrayList<>();
 
-    public User (String name, LocalDate dateOfBirth, Role role){
-        this.id=CalculateID(users);
-        this.name=name;
-        this.dateOfBirth=dateOfBirth;
-        this.role=role;
+    public User(String name, LocalDate dateOfBirth, Role role) {
+        this.id = generateId();
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
     }
 
     public String getId() {
@@ -47,30 +48,24 @@ public class User {
         this.role = role;
     }
 
-
-    private static String CalculateID(ArrayList<User> users){ // private fordi den skal kun bruges her i klassen, man kan ikke calculate id ud fra klassen
-
-        int id = 0;
-            for(User u: users){
-                int idPars=Integer.parseInt(u.getId());
-                if(idPars>id){
-                    id=idPars;
-                }
-            }
-            id+=1;
-
-        String idString=String.valueOf(id); //converting the int ID to String
-        return (idString);
+    public int getAge() {
+        return calculateAge();
     }
 
-    private int calculateAge () { // private because to be used only in this class
-        LocalDate currentDate=LocalDate.now();
+    private static String generateId() { // private fordi den skal kun bruges her i klassen, man kan ikke calculate id ud fra klassen
+        return UUID.randomUUID().toString();
+    }
+
+    private int calculateAge() { // private because to be used only in this class
+        LocalDate currentDate = LocalDate.now();
         Period period = Period.between(dateOfBirth, currentDate);
         return (period.getYears());
     }
 
-    public int getage(){
-        return calculateAge();
+    public String toString() {
+        return String.format("  Name: %s\n" +
+                        "  Date of Birth: %s\n" +
+                        "  Role: %s",
+                name, dateOfBirth, role);
     }
-
 }
