@@ -459,5 +459,8 @@ public class UserInputUtil {
         } while (date == null);
         return date;
     }
-    //</editor-fold>
+
+    public static boolean getBooleanInput(String s) {
+        return false;
+    }
 }
