@@ -1,106 +1,136 @@
 package dolphine.ui;
-import dolphine.Member;
-import dolphine.MemberType;
-import dolphine.util.UserInputUtil;
-import dolphine.repository.MemberRepository;
 
-import java.util.Scanner;
-import static dolphine.ui.MainMenu.HovedMenu;
+import dolphine.Member;
+import dolphine.Role;
+import dolphine.User;
+import dolphine.repository.MemberRepository;
+import dolphine.util.UserInputUtil;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import static dolphine.util.UserInputUtil.getLocalDateInput;
 
 public class MemberUI {
-    public static void MemberMenu(){
+    public static void MenuMember() {
         int choice;
         do {
-            System.out.println(" 1: Create New Member");
-            System.out.println(" 2: Edit existing Member");
-            System.out.println(" 3: Delete existing Member");
-            System.out.println(" 0: Return to Main Menu");
-            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 4", 0, 3);
+            System.out.println(" 0: Exit.");
+            System.out.println(" 1: Create new member.");
+            System.out.println(" 2: Edit member");
+            System.out.println(" 3: Delete member");
+            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "Wrong input, choose a number between 0 and 3", 0, 3);
 
             switch (choice) {
+                case 0:
+                    System.out.println("You chose the option exit \nReturning to Main Menu");
+                    break;
                 case 1:
-                    System.out.println("You chose option 1");
-                    createMember();
+                    saveAndCreateMember();
                     break;
                 case 2:
-                    System.out.println("You chose option 2");
-                    //editMember();
+                    editAndSaveMember();
                     break;
                 case 3:
-                    System.out.println("You chose option 3");
-                    //deleteMember();
+                    deleteAndSaveMember();
                     break;
-
-                case 0:
-                    HovedMenu();
+                default:
+                    System.out.println("Wrong input");
                     break;
-            }//end switch
-        }while (choice !=0);
-    }//end of MemberMenu
-
-    public static void createMember() {
-        Scanner input = new Scanner(System.in);
-        //INDSÆT LINAS METODE, UserUI.createUser(); (String name = UserInputUtil.getStringInput("Enter name: ");
-        int age = UserInputUtil.getIntInput("Enter age: ", "Invalid age, please enter a valid number.", 0, 100);
-        boolean isActive = UserInputUtil.getBooleanInput("Is member active? (true/false): ");
-
-        MemberType memberType;
-        if (age > 18) {
-            memberType = MemberType.JUNIOR;
-        } else if (age <= 18 && age >= 60) {
-            memberType = MemberType.SENIOR;
-        }
-
-        System.out.println("Is member active? " + isActive);
-
-
-        //lave et nye Member objekt --> med de specifikke karakteristika/parametre
-        Member newMember = new Member(age, isActive, memberType);
-
-        //vil have medlemmet tilføjet til repository
-        MemberRepository.addMember(newMember);
-
-        System.out.println("Member added successfully!");
+            }
+        } while (choice != 0);
     }
-            //enter new member into an arraylist in repository (method)
-            //print member information to a new file
 
-    } //end of createMember
+    //gemme nye member objekt til arraylist i repository
+    public static void saveAndCreateMember() {
+        Member newMember = createMember();
+        MemberRepository.createMember(newMember);
+        memberRepository.addMember(newMember);
+        System.out.println("Member created \n" + newMember);
+    }
 
-      /*  public static void editMember(Member updatedMember, Scanner input) {
-      hent members arraylist
-      læse indtil medlemmet findes, ID'et
-      overskrive , set member parametre
-
-
-
-               System.out.println("Enter the name of the Member you would like to edit");
-               String memberName = input.nextLine();
-
-               boolean found = false;
-
-               for (int i = 0; i < MemberRepository.memberList.size(); i++) {
-                   Member member = memberList.get(i);
-                   if (member.getName().equals(memberName)) {
-                       memberList.set(i, updatedMember);
-                       System.out.println("Member information updated successfully.");
-                       found = true;
-                       break; // Stop searching once the member is found and updated
-                   }
-               }
-               if (!found) {
-                   System.out.println("Member with name \"" + memberName + "\" not found in the repository.");
-               }
-           }
-       }
-
-            //method to print arraylist to console
-            //method in MemberRepository to get members by searching for their name
+    //nyt member objekt,
+    public static Member createMember() {
+        User user = UserUI.createUser(); //new member objekt ved brug af createUser metoden for at undgå redundans
+        boolean isActive = UserInputUtil.getBooleanInput("Is the member active? (true/false): "); //afvikle memberclass attribut
+        Member newMember = new Member(user.getName(), user.getDateOfBirth(), user.getRole(), isActive); //nyt member objekt oprettet med tilhørende informationer
+        newMember.setMemberType();//
+        newMember.setActive(isActive); //medlemstatus aktiv/passiv
+            return newMember;
         }
-        public static void deleteMember () {
-            //call method to print arraylist to console
-            //call method to search for members name to delete chosen member
+    }
+    public static void editAndSaveMember() {
+        System.out.println("Edit member");
+        Member memberToEdit = findMemberByName();
+        if (memberToEdit == null) {
+            return;
         }
-
-        */
-
+        editMember(memberToEdit);
+        MemberRepository.updateMember(memberToEdit);
+    }
+    public static void editMember(Member member) {
+        int choice;
+        do {
+            System.out.println(" 0: Exit.");
+            System.out.println(" 1: Name");
+            System.out.println(" 2: Date of birth");
+            System.out.println(" 3: Role");
+            System.out.println(" 4: Membership status");
+            choice = UserInputUtil.getIntInput("Which information do you want to edit?", "Wrong input, choose a number between 0 and 4", 0, 4);
+            switch (choice) {
+                case 0:
+                    break;
+                case 1:
+                    String name = UserInputUtil.getStringInput("What is the new name of the member?");
+                    member.setName(name);
+                    break;
+                case 2:
+                    System.out.println("What is the new date of birth?");
+                    LocalDate dateOfBirth = getLocalDateInput();
+                    member.setDateOfBirth(dateOfBirth);
+                    member.setMemberType(); // Recalculate member type based on new date of birth
+                    break;
+                case 3:
+                    System.out.println("What is the new role of the member?");
+                    Role role = UserInputUtil.selectObject(Role.values());
+                    member.setRole(role);
+                    break;
+                case 4:
+                    boolean isActive = UserInputUtil.getBooleanInput("Is the member active? (true/false): ");
+                    member.setActive(isActive);
+                    break;
+                default:
+                    System.out.println("Wrong input. Please choose a number between 0-4.");
+                    editMember(member);
+                    break;
+            }
+            if (choice != 0) {
+                System.out.println("Member was successfully edited");
+            }
+        } while (choice != 0);
+    }
+    public static void deleteAndSaveMember() {
+        System.out.println("Delete member");
+        Member memberToDelete = findMemberByName();
+        if (memberToDelete != null) {
+            MemberRepository.deleteMember(memberToDelete);
+        }
+    }
+    public static Member findMemberByName() {
+        boolean findingMember = false;
+        ArrayList<Member> memberList;
+        do {
+            String name = UserInputUtil.getStringInput("Enter the name of the member: ");
+            memberList = MemberRepository.getMemberListByName(name);
+            if (((ArrayList<?>) memberList).isEmpty()) {
+                System.out.println("Member not found");
+                findingMember = UserInputUtil.getStringInput("Try again? y/n", "Please write y or n", new String[]{"y", "n"}).equals("y");
+            }
+        } while (findingMember);
+        if (memberList.isEmpty()) {
+            return null;
+        }
+        System.out.println("Select member");
+        return UserInputUtil.selectObject(memberList);
+    }
+}
