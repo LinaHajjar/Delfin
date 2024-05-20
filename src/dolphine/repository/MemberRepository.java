@@ -1,3 +1,5 @@
+package dolphine.repository;
+
 import dolphine.Member;
 import dolphine.MemberType;
 import java.io.FileWriter;
