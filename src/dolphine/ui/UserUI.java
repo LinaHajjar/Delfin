@@ -16,11 +16,10 @@ public class UserUI {
 
         int choice;
         do {
-            System.out.println(" 0: Exit.");
             System.out.println(" 1: Create new user.");
             System.out.println(" 2: Edit user");
             System.out.println(" 3: Delete user");
-            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 3", 0, 3);
+            choice = UserInputUtil.getIntInput("Enter the number from the list (0 to exit): ", "wrong input, choose a number between 0 and 3", 0, 3);
 
             switch (choice) {
                 case 0:
@@ -96,13 +95,10 @@ public class UserUI {
                     break;
                 default:
                     System.out.println("wrong input, try again");
-                    editUser(user);
                     break;
             }
-            if (choice != 0) {
-                System.out.println("User was edited");
-            }
         } while (choice != 0);
+        System.out.println("User was edited");
     }//end of editUser
 
     public static void deleteAndSaveUser() {
