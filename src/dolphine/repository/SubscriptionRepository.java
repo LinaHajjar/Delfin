@@ -4,37 +4,79 @@ import dolphine.Subscription;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SubscriptionRepository {
     private static final String filePath = "src/dolphine/repository/subscriptionFile.txt";
 
     public static void createSubscription(Subscription subscription) {
+        ArrayList<Subscription> subscriptionList = getSubscriptionList();
+        if (subscriptionList == null) {
+            return;
+        }
+        subscriptionList.add(subscription);
+        overrideSubscriptionList(subscriptionList);
+    }
+
+    public static void saveSubscriptionList(ArrayList<Subscription> subscriptionList) {
+        ArrayList<Subscription> subscriptionListFromFile = getSubscriptionList();
+        if (subscriptionListFromFile == null) {
+            return;
+        }
+        subscriptionListFromFile.addAll(subscriptionList);
+        overrideSubscriptionList(subscriptionListFromFile);
+    }
+
+    public static ArrayList<Subscription> getSubscriptionList() {
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath, true));
-            oos.writeObject(subscription); // Serialize each subscription object and write to the file
+            File file = new File(filePath);
+
+            // Check if the file is empty
+            if (file.length() == 0) {
+                return new ArrayList<>();
+            }
+            FileInputStream fileInputStream = new FileInputStream(file);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            ArrayList<Subscription> loadedSubscriptions = (ArrayList<Subscription>) objectInputStream.readObject();
+            return loadedSubscriptions;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void overrideSubscriptionList(ArrayList<Subscription> subscriptionList) {
+        try  {
+            ObjectOutputStream outPutStream = new ObjectOutputStream(new FileOutputStream(filePath));
+            outPutStream.writeObject(subscriptionList);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static ArrayList<Subscription> getSubscriptionList() {
-        ArrayList<Subscription> subscriptions = new ArrayList<>();
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
-            while (true) {
-                try {
-                    Subscription subscription = (Subscription) ois.readObject(); // Deserialize a Subscription object from the file
-                    subscriptions.add(subscription); // Add the deserialized object to the ArrayList
-                } catch (EOFException e) {
-                    // End of file reached, break out of the loop
-                    break;
-                }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+    public static void updateSubscription(Subscription subscription) {
+        ArrayList<Subscription> subscriptionList = getSubscriptionList();
+        if (subscriptionList == null) {
+            return;
         }
-        return subscriptions;
+        // Find matching subscription and update all fields to make sure they are the same.
+        for (Subscription sub : subscriptionList) {
+            if (Objects.equals(sub.getId(), subscription.getId())) {
+                sub.setMember(subscription.getMember());
+                sub.setAmount(subscription.getAmount());
+                sub.setPayed(subscription.isPayed());
+                sub.setDueDate(subscription.getDueDate());
+            }
+        }
+        overrideSubscriptionList(subscriptionList);
     }
 
-    // TODO Add update and delete subscriptions
+    public static void deleteSubscription(Subscription subscription) {
+        ArrayList<Subscription> subscriptionList = getSubscriptionList();
+        if (subscriptionList == null) {
+            return;
+        }
+        subscriptionList.removeIf(sub -> Objects.equals(sub.getId(), subscription.getId()));
+        overrideSubscriptionList(subscriptionList);
+    }
 }

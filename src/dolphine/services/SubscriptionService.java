@@ -5,6 +5,7 @@ import dolphine.MemberType;
 import dolphine.Subscription;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class SubscriptionService {
@@ -16,10 +17,8 @@ public class SubscriptionService {
     private final int seniorBreakPointAge = 60;
     private final int juniorBreakPointAge = 18;
 
-    private final LocalDate seasonStartDate;
 
     public SubscriptionService() {
-        this.seasonStartDate = calculateNextFirstOfAugust();
     }
 
     public double calculateSubscriptionFee(Member member) {
@@ -36,6 +35,11 @@ public class SubscriptionService {
             // Base subscription fee
             return baseMemberFee;
         }
+    }
+
+    public double calculateSubscriptionFeeForRestOfSeason(Member member) {
+        double memberFee = calculateSubscriptionFee(member);
+        return memberFee * (100 - calculatePercentageOfYearUntilNextSeasonStart()) / 100;
     }
 
     // TODO Create calculate subscription left for season.
@@ -95,11 +99,26 @@ public class SubscriptionService {
         return nextFirstOfAugust;
     }
 
+    private double calculatePercentageOfYearUntilNextSeasonStart(){
+        LocalDate today = LocalDate.now();
+        // Step 1: Calculate the number of days between today and the next 1st of August
+        long daysUntilNextSeasonStart = ChronoUnit.DAYS.between(today, getNextSeasonStartDate());
+
+        // Step 2: Calculate the total number of days in the current year
+        LocalDate startOfYear = LocalDate.of(today.getYear(), 1, 1);
+        LocalDate endOfYear = LocalDate.of(today.getYear(), 12, 31);
+        long totalDaysInYear = ChronoUnit.DAYS.between(startOfYear, endOfYear) + 1; // +1 to include both start and end dates
+
+        // Step 3: Calculate the percentage of the year
+        return ((double) daysUntilNextSeasonStart / totalDaysInYear) * 100;
+
+    }
+
     private boolean birthDayBeforeSeasonStart(LocalDate birthday) {
         int birthdayMonth = birthday.getMonthValue();
         int birthdayDay = birthday.getDayOfMonth();
-        int seasonStartMonth = seasonStartDate.getMonthValue();
-        int seasonStartDay = seasonStartDate.getDayOfMonth();
+        int seasonStartMonth = getNextSeasonStartDate().getMonthValue();
+        int seasonStartDay = getNextSeasonStartDate().getDayOfMonth();
 
         if (birthdayMonth < seasonStartMonth) {
             return true;  // Birthday month is earlier
@@ -135,7 +154,7 @@ public class SubscriptionService {
         return juniorBreakPointAge;
     }
 
-    public LocalDate getSeasonStartDate() {
-        return seasonStartDate;
+    public LocalDate getNextSeasonStartDate() {
+        return calculateNextFirstOfAugust();
     }
 }
