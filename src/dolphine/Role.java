@@ -1,10 +1,14 @@
 package dolphine;
 
-public enum Role {
+import java.io.Serializable;
+
+public enum Role implements Serializable {
     ADMIN,
     TRAINER,
     CASHIER,
-    SWIMMEMBER,
+    COMPETITIONMEMBER,
+
+    RECREATIONALMEMBER,
     CHAIRMAN,
     MANAGEMENT,
 }
