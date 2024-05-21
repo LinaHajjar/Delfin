@@ -1,19 +1,23 @@
 package dolphine;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.UUID;
 
-public class User {
+public class User implements Serializable {
     private String id;
     private String name;
     private LocalDate dateOfBirth;
     private Role role;
 
-    public User (String id, String name, LocalDate dateOfBirth, Role role){
-        this.id=id;
-        this.name=name;
-        this.dateOfBirth=dateOfBirth;
-        this.role=role;
+
+    public User(String name, LocalDate dateOfBirth, Role role) {
+        this.id = generateId();
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
     }
 
     public String getId() {
@@ -44,14 +48,24 @@ public class User {
         this.role = role;
     }
 
-    public int getAge(){
+    public int getAge() {
         return calculateAge();
     }
-    private int calculateAge(){
+
+    private static String generateId() { // private fordi den skal kun bruges her i klassen, man kan ikke calculate id ud fra klassen
+        return UUID.randomUUID().toString();
+    }
+
+    private int calculateAge() { // private because to be used only in this class
         LocalDate currentDate = LocalDate.now();
-        // Calculate the period between the birthdate and current date
-        Period period = Period.between(this.dateOfBirth, currentDate);
-        // Return the difference in years
-        return period.getYears();
+        Period period = Period.between(dateOfBirth, currentDate);
+        return (period.getYears());
+    }
+
+    public String toString() {
+        return String.format("  Name: %s\n" +
+                        "  Date of Birth: %s\n" +
+                        "  Role: %s",
+                name, dateOfBirth, role);
     }
 }
