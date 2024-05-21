@@ -52,7 +52,7 @@ public class UserUI {
         System.out.println("Enter date of birth");
         LocalDate dateOfBirth = getLocalDateInput(DateTimeFormatter.ofPattern("dd-MM-yyyy"), "dd-MM-yyyy");
         System.out.println("Select role of the user");
-        Role role = UserInputUtil.selectObject(Role.values());
+        Role role = UserInputUtil.selectObject(Role.values()); //printer enum rollerne ud i en liste
 
         return new User(name, dateOfBirth, role);
     }//end of createUser

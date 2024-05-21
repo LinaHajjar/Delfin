@@ -3,7 +3,6 @@ package dolphine;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class User implements Serializable {
@@ -19,7 +18,6 @@ public class User implements Serializable {
         this.dateOfBirth = dateOfBirth;
         this.role = role;
     }
-
     //constructor for already existing user
     public User(String id, String name, LocalDate dateOfBirth, Role role){
         this.id = id;
