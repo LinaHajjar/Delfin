@@ -19,7 +19,8 @@ public class MemberUI {
             System.out.println(" 1: Create new member.");
             System.out.println(" 2: Edit member");
             System.out.println(" 3: Delete member");
-            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "Wrong input, choose a number between 0 and 3", 0, 3);
+            System.out.println(" 4: Show list of members");
+            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "Wrong input, choose a number between 0 and 4", 0, 3);
 
             switch (choice) {
                 case 0:
@@ -33,6 +34,9 @@ public class MemberUI {
                     break;
                 case 3:
                     deleteAndSaveMember();
+                    break;
+                case 4:
+                    showArrayList();
                     break;
                 default:
                     System.out.println("Wrong input");

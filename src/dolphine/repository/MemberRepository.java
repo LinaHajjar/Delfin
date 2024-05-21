@@ -45,4 +45,9 @@ public class MemberRepository {
                 .filter(member -> member.getName().equalsIgnoreCase(name))
                 .collect(Collectors.toList());
             }
-        }
+
+    public static showArrayList(){
+
+
+    }
+}
