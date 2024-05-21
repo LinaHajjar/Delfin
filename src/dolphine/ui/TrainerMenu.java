@@ -4,6 +4,7 @@ import dolphine.Role;
 import dolphine.Trainer;
 import dolphine.User;
 import dolphine.repository.TrainerRepository;
+import dolphine.repository.UserRepository;
 import dolphine.util.UserInputUtil;
 
 import java.time.LocalDate;
@@ -20,8 +21,9 @@ public class TrainerMenu {
             System.out.println("  type 1: Register Trainer                     ");
             System.out.println("  type 2: Edit Trainer                         ");
             System.out.println("  type 3: Delete Trainer                       ");
+            System.out.println("  type 4: View All Trainers                    ");
             System.out.println("  type 0: Go back                              ");
-            int[] choiceArray = new int[]{1,2,3,0};
+            int[] choiceArray = new int[]{1,2,3,4,0};
             choice = UserInputUtil.getIntInput("Input a number to select an option","Invalid Choice, try again",choiceArray);
             switch(choice){
                 case 1://register trainer
@@ -33,27 +35,37 @@ public class TrainerMenu {
                 case 3://delete trainer
                     deleteTrainer();
                     break;
+                case 4://view all trainers
+                    viewTrainers();
+                    break;
                 case 0:
                     return;
             }
         } while (choice != 0);
     }
 
-    //TODO check when user is done
+    private static void viewTrainers() {
+        ArrayList<User> userlist = UserRepository.getUserList();
+        for(User user : userlist){
+            if(user instanceof Trainer){
+                System.out.println(user);
+            }
+        }
+    }
+
     //method to select and delete a trainer from repository
     private static void deleteTrainer() {
-        Trainer trainerChosen = selectTrainer();
+        ArrayList<User> userList = UserRepository.getUserList();
+        Trainer trainerChosen = selectTrainer(userList);
         TrainerRepository.deleteTrainerFromUserList(trainerChosen);
     }
 
-
-    //TODO when User menu and repository class is finished
     //method to edit a Trainer's senority
     private static void editTrainer() {
         ArrayList<User> userList = UserRepository.getUserList();
-        Trainer trainerChosen = selectTrainer();
+        Trainer trainerChosen = selectTrainer(userList);
         System.out.println("You have selected Trainer: \n" + trainerChosen);
-        int newSenority = UserInputUtil.getIntInput("Enter new Senority", "Invalid choice", 0,99);
+        int newSenority = UserInputUtil.getIntInput("Enter new Senority", "Invalid input", 0,99);
         trainerChosen.setSeniority(newSenority);
         System.out.println("Senority updated, new senority: " + trainerChosen.getSeniority());
         try {
@@ -65,10 +77,9 @@ public class TrainerMenu {
         }
     }
 
-    //TODO test when user is finished
     //method to select and return trainer from userArray via scanner input
-    public static Trainer selectTrainer(){
-        ArrayList<Trainer> trainerArray = getTrainerArrayList();
+    public static Trainer selectTrainer(ArrayList<User> userList){
+        ArrayList<Trainer> trainerArray = getTrainerArrayList(userList);
         Trainer trainerChosen = null;
         do {
             trainerChosen = UserInputUtil.selectObject(trainerArray);
@@ -83,11 +94,10 @@ public class TrainerMenu {
         TrainerRepository.saveTrainerToUserList(newTrainer);
     }
 
-    //TODO when User menu and repository class is finished
     //method for creating a Trainer object via scanner input
     public static Trainer createTrainer(){
         try {
-            User newUser = UserMenu.createUser();
+            User newUser = UserUI.createUser();
             int seneriority = UserInputUtil.getIntInput("Input trainer's seniority (int): ","Invalid Input",0,99);
             Trainer newTrainer = new Trainer(newUser,seneriority);
             return newTrainer;
@@ -98,13 +108,11 @@ public class TrainerMenu {
         }
     }
 
-    //TODO when User menu and repository class is finished
     //method for getting a Trainer ArrayList from a User ArrayList
-    public static ArrayList<Trainer> getTrainerArrayList(){
+    public static ArrayList<Trainer> getTrainerArrayList(ArrayList<User> userList){
         try {
-            ArrayList<User> userArray = UserRepository.getUserlist();
             ArrayList<Trainer> trainerArray = new ArrayList<>();
-            for(User user : userArray){
+            for(User user : userList){
                 if(user instanceof Trainer){
                     trainerArray.add((Trainer) user);
                 }

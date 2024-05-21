@@ -7,14 +7,22 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String id;
     private String name;
     private LocalDate dateOfBirth;
     private Role role;
 
-
     public User(String name, LocalDate dateOfBirth, Role role) {
         this.id = generateId();
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
+    }
+
+    //constructor for already existing user
+    public User(String id, String name, LocalDate dateOfBirth, Role role){
+        this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.role = role;
@@ -67,21 +75,5 @@ public class User implements Serializable {
                         "  Date of Birth: %s\n" +
                         "  Role: %s",
                 name, dateOfBirth, role);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public Role getRole() {
-        return role;
     }
 }
