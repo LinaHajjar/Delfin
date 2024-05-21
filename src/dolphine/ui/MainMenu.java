@@ -25,7 +25,7 @@ public class MainMenu {
                     System.out.println("you chose option 2");
                     break;
                 case 3:
-                    System.out.println("you chose option 3");
+                    TrainerMenu.trainerSubMenu();
                     break;
                 case 4:
                     System.out.println("you chose option 4");
