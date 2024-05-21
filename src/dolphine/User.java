@@ -26,14 +26,6 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    //constructor for already existing user
-    public User(String id, String name, LocalDate dateOfBirth, Role role){
-        this.id = id;
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.role = role;
-    }
-
     public String getId() {
         return id;
     }

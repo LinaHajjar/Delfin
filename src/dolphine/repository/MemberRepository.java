@@ -1,19 +1,25 @@
 package dolphine.repository;
 
 import dolphine.Member;
+import dolphine.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static dolphine.repository.UserRepository.getUserList;
 
 public class MemberRepository {
     public static List<Member> memberList = new ArrayList<>();
+
     public static void addMember(Member member) {
         memberList.add(member);
         //saveMemberToFile(member);
     }
-    public static void createMember(Member newMember) {
-        memberList.add(newMember);
+
+    public static void saveMember(Member newMember) {
+        ArrayList<User> userList = getUserList();
+        userList.add(newMember); //tilføjer til den fælles userlist
+        UserRepository.saveUserList(userList);
     }
    /* public static void saveMemberToFile(Member member) {
         try (FileWriter writer = new FileWriter("members.txt", true)) { // Append mode
@@ -28,23 +34,13 @@ public class MemberRepository {
                     System.err.println("An error occurred while writing to the file: " + e.getMessage());
                 }*/
 
-    public static void updateMember(Member member) {
-        int index = memberList.indexOf(member);
-        if (index != -1) {
-            memberList.set(index, member);
-        }
-    }
-    public static void deleteMember(Member member) {
-        memberList.remove(member);
-    }
-    public static List<Member> getMemberListByName(String name) {
-        return memberList.stream()
-                .filter(member -> member.getName().equalsIgnoreCase(name))
-                .collect(Collectors.toList());
-            }
-    public static void showArrayList(){
-        for (Member member : memberList) {
-            System.out.println(member);
+
+    public static void showArrayList() {
+        ArrayList<User> userList = getUserList(); //henter arraylisten
+        for (User user : userList) {
+            if (user instanceof Member) {
+                System.out.println(user);
             }
         }
+    }
 }

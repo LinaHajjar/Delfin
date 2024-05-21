@@ -37,8 +37,8 @@ public class Member extends User{
     }
 
     public String toString() {
-        return "\nMember information: " +
-                "\nName: " + getName() + "\nDate Of Birth: " + getDateOfBirth() + "\nMember type (age group): " + memberType + "\nMembership status: " + isActive + "\nRole: " + getRole() + "\n";
+        return super.toString() +
+                "\nMember type (age group): " + memberType + "\nMembership status: " + (isActive ? "active" : "inactive" ) + "\n";
     }
 }
 

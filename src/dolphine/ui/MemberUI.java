@@ -1,16 +1,15 @@
 package dolphine.ui;
 
 import dolphine.Member;
-import dolphine.Role;
 import dolphine.User;
 import dolphine.repository.MemberRepository;
+import dolphine.repository.UserRepository;
 import dolphine.util.UserInputUtil;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static dolphine.util.UserInputUtil.getLocalDateInput;
+import static dolphine.repository.UserRepository.getUserList;
 
 public class MemberUI {
     public static void MenuMember() {
@@ -31,10 +30,10 @@ public class MemberUI {
                     saveAndCreateMember();
                     break;
                 case 2:
-                    editAndSaveMember();
+                    editMember();
                     break;
                 case 3:
-                    deleteAndSaveMember();
+                    deleteMember();
                     break;
                 case 4:
                     MemberRepository.showArrayList();
@@ -49,7 +48,7 @@ public class MemberUI {
     //gemme nye member objekt til arraylist i repository
     public static void saveAndCreateMember() {
         Member newMember = createMember();
-        MemberRepository.createMember(newMember);
+        MemberRepository.saveMember(newMember);
         MemberRepository.addMember(newMember);
         System.out.println("Member created successfully \n" + newMember+ "\n");
     }
@@ -68,80 +67,47 @@ public class MemberUI {
             return newMember;
         }
 
-    public static void editAndSaveMember() {
+    public static void editMember() {
         System.out.println("Edit member");
-        Member memberToEdit = findMemberByName();
-        if (memberToEdit == null) {
-            return;
+        ArrayList<User> userList = getUserList(); //henter arraylisten
+        Member memberToEdit = selectMember(userList);
+        System.out.println("Membership status is " + (memberToEdit.getIsActive() ? "active" : "inactive" ));
+        int choice = UserInputUtil.getIntInput("Enter 1 to set to active, or 2 to set inactive",  " Invalid choice", 1,2);
+        if (choice == 1){
+            memberToEdit.setActive(true);
+        } if (choice == 2){
+            memberToEdit.setActive(false);
         }
-        editMember(memberToEdit);
-        MemberRepository.updateMember(memberToEdit);
-    }
-
-    public static void editMember(Member member) {
-        int choice;
+        System.out.println("Membership status is now " + (memberToEdit.getIsActive() ? "active" : "inactive" ));
+        UserRepository.saveUserList(userList);
+        }
+    private static Member selectMember(ArrayList<User> userList) {
+        ArrayList<Member> memberList = getMemberArrayList(userList);
+        Member memberChosen = null;
         do {
-            System.out.println(" 0: Exit.");
-            System.out.println(" 1: Name");
-            System.out.println(" 2: Date of birth");
-            System.out.println(" 3: Role");
-            System.out.println(" 4: Membership status");
-            choice = UserInputUtil.getIntInput("Which information do you want to edit?", "Wrong input, choose a number between 0 and 4", 0, 4);
-            switch (choice) {
-                case 0:
-                    break;
-                case 1:
-                    String name = UserInputUtil.getStringInput("What is the new name of the member?");
-                    member.setName(name);
-                    break;
-                case 2:
-                    System.out.println("What is the new date of birth?");
-                    LocalDate dateOfBirth = getLocalDateInput();
-                    member.setDateOfBirth(dateOfBirth);
-                    member.setMemberType(); // Recalculate member type based on new date of birth
-                    break;
-                case 3:
-                    System.out.println("What is the new role of the member?");
-                    Role role = UserInputUtil.selectObject(Role.values());
-                    member.setRole(role);
-                    break;
-                case 4:
-                    boolean isActive = UserInputUtil.getBooleanInput("Is the member active? (true/false): ");
-                    member.setActive(isActive);
-                    break;
-                default:
-                    System.out.println("Wrong input. Please choose a number between 0-4.");
-                    editMember(member);
-                    break;
-            }
-            if (choice != 0) {
-                System.out.println("Member was successfully edited");
-            }
-        } while (choice != 0);
+            memberChosen = UserInputUtil.selectObject(memberList); //vælge objekt fra listen, som kun er member
+        }
+        while (memberChosen == null);
+        return memberChosen;
     }
 
-    public static void deleteAndSaveMember() {
+    //Liste KUN af members
+    private static ArrayList<Member> getMemberArrayList(ArrayList<User> userList) {
+        ArrayList<Member> memberList = new ArrayList();
+        for (User user : userList){
+            if (user instanceof Member) {
+                memberList.add((Member) user); //caster user med (member)
+            }
+        }
+        return memberList;
+    }
+
+    public static void deleteMember() {
         System.out.println("Delete member");
-        Member memberToDelete = findMemberByName();
-        if (memberToDelete != null) {
-            MemberRepository.deleteMember(memberToDelete);
+        ArrayList<User> userList = getUserList(); //henter arraylisten
+        Member memberToDelete = selectMember(userList);
+        userList.remove(memberToDelete);
+        UserRepository.saveUserList(userList);
+        System.out.println("Member successfully deleted.");
         }
-    }
-    public static Member findMemberByName() {
-        boolean findingMember = false;
-        ArrayList<Member> memberList;
-        do {
-            String name = UserInputUtil.getStringInput("Enter the name of the member: ");
-            memberList = (ArrayList<Member>) MemberRepository.getMemberListByName(name);
-            if (((ArrayList<?>) memberList).isEmpty()) {
-                System.out.println("Member not found");
-                findingMember = UserInputUtil.getStringInput("Try again? y/n", "Please write y or n", new String[]{"y", "n"}).equals("y");
-            }
-        } while (findingMember);
-        if (memberList.isEmpty()) {
-            return null;
-        }
-        System.out.println("Select member");
-        return UserInputUtil.selectObject(memberList);
-    }
 }
