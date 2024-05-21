@@ -8,16 +8,13 @@ public class Member extends User{
 
     public Member (String name, LocalDate dateOfBirth, Role role, boolean IsActive, MemberType memberType) {
         super(name, dateOfBirth, role);
-        boolean IsActive;
         this.isActive = isActive;
         this.memberType = memberType;
         setMemberType(); //udregne membertype udfra alderen
     }
-    public Member(User user, boolean isActive, MemberType memberType){
-        super(user.getName(), user.getDateOfBirth(),user.getRole());
+    public Member(User user, boolean isActive){
+        super(user.getId(), user.getName(), user.getDateOfBirth(),user.getRole());
         this.isActive=isActive;
-        this.memberType=memberType;
-
     }
         public boolean getIsActive() {
             return isActive;
@@ -40,8 +37,8 @@ public class Member extends User{
     }
 
     public String toString() {
-        return "Member information: " +
-                "\nName: " + getName() + "\ndateOfBirth: " + getDateOfBirth() + "\nMember type (age group): " + memberType "\nMembership status: " + isActive + "\nRole: " + getRole()
+        return "\nMember information: " +
+                "\nName: " + getName() + "\nDate Of Birth: " + getDateOfBirth() + "\nMember type (age group): " + memberType + "\nMembership status: " + isActive + "\nRole: " + getRole() + "\n";
     }
 }
 

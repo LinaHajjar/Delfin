@@ -2,8 +2,6 @@ package dolphine.ui;
 
 import dolphine.util.UserInputUtil;
 
-import static dolphine.ui.MemberUI.MemberMenu;
-
 public class MainMenu {
     public static void HovedMenu(){
         int choice;
@@ -25,7 +23,7 @@ public class MainMenu {
                     break;
                 case 2:
                     System.out.println("You chose option 2");
-                    MemberMenu();
+                    MemberUI.MenuMember();
                     break;
                 case 3:
                     System.out.println("You chose option 3");
@@ -41,5 +39,4 @@ public class MainMenu {
         }while (choice !=0);
 
     }//end of HovedMenu
-
 }

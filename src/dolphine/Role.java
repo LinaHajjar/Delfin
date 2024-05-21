@@ -6,7 +6,9 @@ public enum Role implements Serializable {
     ADMIN,
     TRAINER,
     CASHIER,
-    SWIMMEMBER,
+    COMPETITIONMEMBER,
+
+    RECREATIONALMEMBER,
     CHAIRMAN,
     MANAGEMENT,
 }

@@ -8,6 +8,7 @@ import dolphine.util.UserInputUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static dolphine.util.UserInputUtil.getLocalDateInput;
 
@@ -15,12 +16,12 @@ public class MemberUI {
     public static void MenuMember() {
         int choice;
         do {
-            System.out.println(" 0: Exit.");
-            System.out.println(" 1: Create new member.");
+            System.out.println(" 1: Create new member");
             System.out.println(" 2: Edit member");
             System.out.println(" 3: Delete member");
             System.out.println(" 4: Show list of members");
-            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "Wrong input, choose a number between 0 and 4", 0, 3);
+            System.out.println(" 0: Return to Main Menu");
+            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "Wrong input, choose a number between 0 and 4", 0, 4);
 
             switch (choice) {
                 case 0:
@@ -36,7 +37,7 @@ public class MemberUI {
                     deleteAndSaveMember();
                     break;
                 case 4:
-                    showArrayList();
+                    MemberRepository.showArrayList();
                     break;
                 default:
                     System.out.println("Wrong input");
@@ -49,20 +50,24 @@ public class MemberUI {
     public static void saveAndCreateMember() {
         Member newMember = createMember();
         MemberRepository.createMember(newMember);
-        memberRepository.addMember(newMember);
-        System.out.println("Member created \n" + newMember);
+        MemberRepository.addMember(newMember);
+        System.out.println("Member created successfully \n" + newMember+ "\n");
     }
 
     //nyt member objekt,
     public static Member createMember() {
         User user = UserUI.createUser(); //new member objekt ved brug af createUser metoden for at undgå redundans
-        boolean isActive = UserInputUtil.getBooleanInput("Is the member active? (true/false): "); //afvikle memberclass attribut
-        Member newMember = new Member(user.getName(), user.getDateOfBirth(), user.getRole(), isActive); //nyt member objekt oprettet med tilhørende informationer
-        newMember.setMemberType();//
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Is the member active? (true/false): ");
+        boolean isActive = scanner.nextBoolean();
+
+        Member newMember = new Member(user, isActive); //nyt member objekt oprettet med tilhørende informationer
+        newMember.setMemberType();
         newMember.setActive(isActive); //medlemstatus aktiv/passiv
             return newMember;
         }
-    }
+
     public static void editAndSaveMember() {
         System.out.println("Edit member");
         Member memberToEdit = findMemberByName();
@@ -72,6 +77,7 @@ public class MemberUI {
         editMember(memberToEdit);
         MemberRepository.updateMember(memberToEdit);
     }
+
     public static void editMember(Member member) {
         int choice;
         do {
@@ -113,6 +119,7 @@ public class MemberUI {
             }
         } while (choice != 0);
     }
+
     public static void deleteAndSaveMember() {
         System.out.println("Delete member");
         Member memberToDelete = findMemberByName();
@@ -125,7 +132,7 @@ public class MemberUI {
         ArrayList<Member> memberList;
         do {
             String name = UserInputUtil.getStringInput("Enter the name of the member: ");
-            memberList = MemberRepository.getMemberListByName(name);
+            memberList = (ArrayList<Member>) MemberRepository.getMemberListByName(name);
             if (((ArrayList<?>) memberList).isEmpty()) {
                 System.out.println("Member not found");
                 findingMember = UserInputUtil.getStringInput("Try again? y/n", "Please write y or n", new String[]{"y", "n"}).equals("y");
