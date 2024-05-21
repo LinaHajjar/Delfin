@@ -18,53 +18,53 @@ public class SubscriptionServiceTest {
 
     @org.junit.jupiter.api.Test
     public void testCalculateSubscriptionFee_AtNextSeason_InactiveMember() {
-        Member activeMember = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.SWIMMEMBER, false, MemberType.SENIOR);
+        Member activeMember = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.COMPETITIONMEMBER, false);
         assertEquals(subscriptionService.getInActiveMemberFee(), subscriptionService.calculateSubscriptionFeeAtNextSeason(activeMember), 0.01);
     }
 
     @org.junit.jupiter.api.Test
     public void testCalculateSubscriptionFee_AtNextSeason_JuniorMember() {
         // Junior member not at juniorBreakPointAge at seasonStartDate
-        Member juniorMember = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge() - 2), Role.SWIMMEMBER, true, MemberType.JUNIOR);
+        Member juniorMember = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge() - 2), Role.COMPETITIONMEMBER, true);
         assertEquals(subscriptionService.getBaseMemberFee() - subscriptionService.getJuniorMemberFeeDiscount(), subscriptionService.calculateSubscriptionFeeAtNextSeason(juniorMember), 0.01);
     }
 
     @org.junit.jupiter.api.Test
     public void testCalculateSubscriptionFee_AtNextSeason_TurningSeniorMemberBeforeNextSeason() {
         // Junior member turning above juniorBreakPointAge before seasonStartDate
-        Member juniorMember = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge()).minusDays(1), Role.SWIMMEMBER, true, MemberType.JUNIOR);
+        Member juniorMember = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge()).minusDays(1), Role.COMPETITIONMEMBER, true);
         assertEquals(subscriptionService.getBaseMemberFee(), subscriptionService.calculateSubscriptionFeeAtNextSeason(juniorMember), 0.01);
     }
 
     @org.junit.jupiter.api.Test
     public void testCalculateSubscriptionFee_AtNextSeason_AboveSeniorMember() {
         // Above senior member not above seniorBreakPointAge at seasonStartDate
-        Member seniorMember = new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 2), Role.SWIMMEMBER, true, MemberType.SENIOR);
-        assertEquals(subscriptionService.getBaseMemberFee() * (100 - subscriptionService.getAboveSeniorBreakpointMemberFeeDiscountProcentage()) / 100, subscriptionService.calculateSubscriptionFeeAtNextSeason(seniorMember), 0.01);
+        Member seniorMember = new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 2), Role.COMPETITIONMEMBER, true);
+        assertEquals(subscriptionService.getBaseMemberFee() * (100 - subscriptionService.getAboveSeniorBreakpointMemberFeeDiscountPercentage()) / 100, subscriptionService.calculateSubscriptionFeeAtNextSeason(seniorMember), 0.01);
     }
 
     @org.junit.jupiter.api.Test
     public void testCalculateSubscriptionFee_AtNextSeason_TurningAboveSeniorMemberBeforeNextSeason() {
         // Above senior member is turning above seniorBreakPointAge before seasonStartDate
-        Member seniorMember = new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 1).minusDays(1), Role.SWIMMEMBER, true, MemberType.SENIOR);
-        assertEquals(subscriptionService.getBaseMemberFee() * (100 - subscriptionService.getAboveSeniorBreakpointMemberFeeDiscountProcentage()) / 100, subscriptionService.calculateSubscriptionFeeAtNextSeason(seniorMember), 0.01);
+        Member seniorMember = new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 1).minusDays(1), Role.COMPETITIONMEMBER, true);
+        assertEquals(subscriptionService.getBaseMemberFee() * (100 - subscriptionService.getAboveSeniorBreakpointMemberFeeDiscountPercentage()) / 100, subscriptionService.calculateSubscriptionFeeAtNextSeason(seniorMember), 0.01);
     }
 
     @org.junit.jupiter.api.Test
     public void testCalculateSubscriptionFee_AtNextSeason_SeniorMember() {
-        Member activeMember = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.SWIMMEMBER, true, MemberType.SENIOR);
+        Member activeMember = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.COMPETITIONMEMBER, true);
         assertEquals(subscriptionService.getBaseMemberFee(), subscriptionService.calculateSubscriptionFeeAtNextSeason(activeMember), 0.01);
     }
 
     @org.junit.jupiter.api.Test
     public void testGenerateSubscriptionReport() {
         ArrayList<Member> memberList = new ArrayList<>();
-        memberList.add(new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.SWIMMEMBER, false, MemberType.SENIOR));
-        memberList.add(new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge() - 2), Role.SWIMMEMBER, true, MemberType.JUNIOR));
-        memberList.add(new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge()).minusDays(1), Role.SWIMMEMBER, true, MemberType.JUNIOR));
-        memberList.add(new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 2), Role.SWIMMEMBER, true, MemberType.SENIOR));
-        memberList.add(new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 1).minusDays(1), Role.SWIMMEMBER, true, MemberType.SENIOR));
-        memberList.add(new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.SWIMMEMBER, true, MemberType.SENIOR));
+        memberList.add(new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.COMPETITIONMEMBER, false));
+        memberList.add(new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge() - 2), Role.COMPETITIONMEMBER, true));
+        memberList.add(new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge()).minusDays(1), Role.COMPETITIONMEMBER, true));
+        memberList.add(new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 2), Role.COMPETITIONMEMBER, true));
+        memberList.add(new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 1).minusDays(1), Role.COMPETITIONMEMBER, true));
+        memberList.add(new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.COMPETITIONMEMBER, true));
 
         String expectedReport = "Subscription Report:\n" +
                 "There are currently a total of 6 members\n" +
@@ -77,12 +77,12 @@ public class SubscriptionServiceTest {
     public void testGetUnpaidSubscriptionList() {
         // TODO update to use subscriptions array instead.
         ArrayList<Subscription> subscriptionArrayList = new ArrayList<>();
-        Member member1 = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.SWIMMEMBER, false, MemberType.SENIOR);
-        Member member2 = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge() - 2), Role.SWIMMEMBER, true, MemberType.JUNIOR);
-        Member member3 = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge()).minusDays(1), Role.SWIMMEMBER, true, MemberType.JUNIOR);
-        Member member4 = new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 2), Role.SWIMMEMBER, true, MemberType.SENIOR);
-        Member member5 = new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 1).minusDays(1), Role.SWIMMEMBER, true, MemberType.SENIOR);
-        Member member6 = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.SWIMMEMBER, true, MemberType.SENIOR);
+        Member member1 = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.COMPETITIONMEMBER, false);
+        Member member2 = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge() - 2), Role.COMPETITIONMEMBER, true);
+        Member member3 = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge()).minusDays(1), Role.COMPETITIONMEMBER, true);
+        Member member4 = new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 2), Role.COMPETITIONMEMBER, true);
+        Member member5 = new Member("Bob", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getSeniorBreakPointAge() + 1).minusDays(1), Role.COMPETITIONMEMBER, true);
+        Member member6 = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.COMPETITIONMEMBER, true);
 
         Subscription subscription1 = new Subscription(member1, 200, LocalDate.now().minusDays(1), true);
         Subscription subscription2 = new Subscription(member2, 600, LocalDate.now().plusDays(1), false);

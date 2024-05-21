@@ -3,11 +3,8 @@ package dolphine;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
-<<<<<<<<< Temporary merge branch 1
-=========
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
->>>>>>>>> Temporary merge branch 2
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -77,6 +74,6 @@ public class User implements Serializable {
         return String.format("  Name: %s\n" +
                         "  Date of Birth: %s\n" +
                         "  Role: %s",
-                name, dateOfBirth, role);
+                name, dateOfBirth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")), role);
     }
 }

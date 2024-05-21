@@ -17,6 +17,7 @@ public class SubscriptionService {
     private final int seniorBreakPointAge = 60;
     private final int juniorBreakPointAge = 18;
 
+    private final int totalDaysInYear = 365;
 
     public SubscriptionService() {
     }
@@ -39,7 +40,7 @@ public class SubscriptionService {
 
     public double calculateSubscriptionFeeForRestOfSeason(Member member) {
         double memberFee = calculateSubscriptionFee(member);
-        return memberFee * (100 - calculatePercentageOfYearUntilNextSeasonStart()) / 100;
+        return memberFee * calculatePercentageOfYearUntilNextSeasonStart() / 100;
     }
 
     // TODO Create calculate subscription left for season.
@@ -48,10 +49,10 @@ public class SubscriptionService {
         if (!member.getIsActive()) {
             // Inactive subscription fee
             return inActiveMemberFee;
-        } else if (member.getMemberType().equals(MemberType.JUNIOR) && !(member.getAge() == juniorBreakPointAge - 1 && birthDayBeforeSeasonStart(member.getDateOfBirth()))) {
+        } else if (member.getMemberType().equals(MemberType.JUNIOR) && !(member.getAge() == juniorBreakPointAge - 1 && isBirthDayBeforeSeasonStart(member.getDateOfBirth()))) {
             // Junior member fee discount given to members that are not juniorBreakPointAge at the seasonStartDate
             return baseMemberFee - juniorMemberFeeDiscount;
-        } else if (member.getAge() > seniorBreakPointAge || member.getAge() == seniorBreakPointAge && birthDayBeforeSeasonStart(member.getDateOfBirth())) {
+        } else if (member.getAge() > seniorBreakPointAge || member.getAge() == seniorBreakPointAge && isBirthDayBeforeSeasonStart(member.getDateOfBirth())) {
             // Above senior member fee discount given to members that are not above seniorBreakPointAge at the seasonStartDate
             return baseMemberFee * (100 - aboveSeniorBreakpointMemberFeeDiscountProcentage) / 100;
         } else {
@@ -99,22 +100,15 @@ public class SubscriptionService {
         return nextFirstOfAugust;
     }
 
-    private double calculatePercentageOfYearUntilNextSeasonStart(){
+    public double calculatePercentageOfYearUntilNextSeasonStart(){
         LocalDate today = LocalDate.now();
-        // Step 1: Calculate the number of days between today and the next 1st of August
+        // Step 1: Calculate the number of days between today and the next season start
         long daysUntilNextSeasonStart = ChronoUnit.DAYS.between(today, getNextSeasonStartDate());
-
-        // Step 2: Calculate the total number of days in the current year
-        LocalDate startOfYear = LocalDate.of(today.getYear(), 1, 1);
-        LocalDate endOfYear = LocalDate.of(today.getYear(), 12, 31);
-        long totalDaysInYear = ChronoUnit.DAYS.between(startOfYear, endOfYear) + 1; // +1 to include both start and end dates
-
-        // Step 3: Calculate the percentage of the year
+        // Step 2: Calculate the percentage of the year
         return ((double) daysUntilNextSeasonStart / totalDaysInYear) * 100;
-
     }
 
-    private boolean birthDayBeforeSeasonStart(LocalDate birthday) {
+    private boolean isBirthDayBeforeSeasonStart(LocalDate birthday) {
         int birthdayMonth = birthday.getMonthValue();
         int birthdayDay = birthday.getDayOfMonth();
         int seasonStartMonth = getNextSeasonStartDate().getMonthValue();
@@ -142,7 +136,7 @@ public class SubscriptionService {
         return juniorMemberFeeDiscount;
     }
 
-    public double getAboveSeniorBreakpointMemberFeeDiscountProcentage() {
+    public double getAboveSeniorBreakpointMemberFeeDiscountPercentage() {
         return aboveSeniorBreakpointMemberFeeDiscountProcentage;
     }
 

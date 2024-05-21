@@ -3,12 +3,12 @@ package dolphine;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class CompetitionMember extends Member{
+public class CompetitionMember extends Member {
     private ArrayList<SwimDiscipline> disciplineList;
 
-    public CompetitionMember (String name, LocalDate dateOfBirth, Role role, boolean isActive, MemberType memberType, ArrayList<SwimDiscipline> disciplineList){
-        super (name,dateOfBirth,role,isActive, memberType);
-        this.disciplineList=disciplineList;
+    public CompetitionMember(String name, LocalDate dateOfBirth, Role role, boolean isActive, ArrayList<SwimDiscipline> disciplineList) {
+        super(name, dateOfBirth, role, isActive);
+        this.disciplineList = disciplineList;
     }
 
     public ArrayList<SwimDiscipline> getDisciplineList() {

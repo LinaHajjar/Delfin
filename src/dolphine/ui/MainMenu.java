@@ -30,6 +30,7 @@ public class MainMenu {
                     TrainerMenu.trainerSubMenu();
                     break;
                 case 4:
+                    SubscriptionUI.subscriptionMenu();
                     System.out.println("You chose option 4");
                     break;
                 default:

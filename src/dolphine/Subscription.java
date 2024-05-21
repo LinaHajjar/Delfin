@@ -71,7 +71,7 @@ public class Subscription implements Serializable {
 
     public String toString() {
         String paymentStatus = isPayed ? "Paid" : "Unpaid";
-        String formattedDate = dueDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")); // Format as needed (e.g., dueDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        String formattedDate = dueDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         return String.format("Subscription Details:\n" +
                         "Member: %s\n" +

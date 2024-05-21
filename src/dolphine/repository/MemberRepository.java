@@ -43,4 +43,29 @@ public class MemberRepository {
             }
         }
     }
+
+    public static ArrayList<Member> getMemberList(){
+        ArrayList<Member> memberList = new ArrayList<>();
+        ArrayList<User> userList = getUserList();
+        if (userList == null){
+            return memberList;
+        }
+        for (User u : userList){
+            if (u instanceof Member){
+                memberList.add((Member) u);
+            }
+        }
+        return memberList;
+    }
+
+    public static ArrayList<Member> getMemberListByName(String name){
+        ArrayList<Member> memberList = getMemberList();
+        ArrayList<Member> memberListByName = new ArrayList<>();
+        for (Member m : memberList) {
+            if (m.getName().toLowerCase().contains(name.toLowerCase())) {
+                memberListByName.add(m);
+            }
+        }
+        return memberListByName;
+    }
 }

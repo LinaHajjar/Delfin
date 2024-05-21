@@ -1,5 +1,6 @@
 package dolphine.repository;
 
+import dolphine.Member;
 import dolphine.Subscription;
 
 import java.io.*;
@@ -78,5 +79,19 @@ public class SubscriptionRepository {
         }
         subscriptionList.removeIf(sub -> Objects.equals(sub.getId(), subscription.getId()));
         overrideSubscriptionList(subscriptionList);
+    }
+
+    public static ArrayList<Subscription> getSubscriptionListFromMember(Member member) {
+        ArrayList<Subscription> subscriptionList = getSubscriptionList();
+        if (subscriptionList == null) {
+            return new ArrayList<>();
+        }
+        ArrayList<Subscription> subscriptionListMatchingMember = new ArrayList<>();
+        for (Subscription sub : subscriptionList) {
+            if (Objects.equals(sub.getMember().getId(), member.getId())) {
+                subscriptionListMatchingMember.add(sub);
+            }
+        }
+        return subscriptionListMatchingMember;
     }
 }
