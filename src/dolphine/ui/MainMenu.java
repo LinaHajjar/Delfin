@@ -27,6 +27,7 @@ public class MainMenu {
                     break;
                 case 3:
                     System.out.println("You chose option 3");
+                    TrainerMenu.trainerSubMenu();
                     break;
                 case 4:
                     System.out.println("You chose option 4");
@@ -39,4 +40,5 @@ public class MainMenu {
         }while (choice !=0);
 
     }//end of HovedMenu
+
 }
