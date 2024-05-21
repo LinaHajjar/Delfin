@@ -3,7 +3,11 @@ package dolphine;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
+<<<<<<<<< Temporary merge branch 1
+=========
+import java.util.ArrayList;
 import java.util.UUID;
+>>>>>>>>> Temporary merge branch 2
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -11,6 +15,7 @@ public class User implements Serializable {
     private String name;
     private LocalDate dateOfBirth;
     private Role role;
+
 
     public User(String name, LocalDate dateOfBirth, Role role) {
         this.id = generateId();
