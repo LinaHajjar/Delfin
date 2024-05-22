@@ -28,19 +28,148 @@ public class SwimTeamUI {
                         registerTeam();
                         break;
                     case 2://edit team
-
+                        editTeam();
                         break;
                     case 3://delete team
-
+                        deleteSwimTeam();
                         break;
                     case 4://view all teams
-
+                        viewAllSwimTeams();
                         break;
                     case 0:
                         return;
                 }
             } while (choice != 0);
         }
+
+    private static void editTeam() {
+        System.out.println("Enter a number to select a Swim Team to Edit");
+        ArrayList<SwimTeam> swimTeamsList = SwimTeamRepository.getSwimTeamList();
+        SwimTeam teamToEdit = UserInputUtil.selectObject(swimTeamsList);
+        int editChoice = UserInputUtil.getIntInput("Enter 1 to edit Name for team \nEnter 2 to edit MemberType for team \nEnter 3 to edit Trainer's for team\nEnter 4 to edit Members for team \nEnter 5 to exit","Invalid Choice", 1,5);
+        switch(editChoice){
+            case 1:
+                editSwimTeamName(teamToEdit);
+                SwimTeamRepository.updateSwimTeam(teamToEdit);
+                System.out.println("Name change updated succesfully");
+                break;
+            case 2:
+                editMemberTypeForSwimTeam(teamToEdit);
+                SwimTeamRepository.updateSwimTeam(teamToEdit);
+                System.out.println("MemberType changes saved to file");
+                break;
+            case 3: //edit trainers for swim team
+                editTrainersForSwimTeam(teamToEdit);
+                SwimTeamRepository.updateSwimTeam(teamToEdit);
+                System.out.println("changes saved to file");
+                break;
+            case 4: //edit members for swim team
+                editMembersForSwimTeam(teamToEdit);
+                SwimTeamRepository.updateSwimTeam(teamToEdit);
+                System.out.println("changes saved to file");
+                break;
+            default://exit editTeam
+                break;
+        }
+    }
+
+    private static void editMemberTypeForSwimTeam(SwimTeam teamToEdit) {
+        MemberType newMemberType = UserInputUtil.selectObject(MemberType.values());
+        teamToEdit.setMemberType(newMemberType);
+    }
+
+    private static void editSwimTeamName(SwimTeam swimteam) {
+        String newName = UserInputUtil.getStringInput("Input new name for swim team");
+        swimteam.setName(newName);
+    }
+
+    private static void editMembersForSwimTeam(SwimTeam teamToEdit) {
+        int firstChoice = UserInputUtil.getIntInput("Enter 1 to add Member \nEnter 2 to remove Member","Invalid Choice",1,2);
+        if(firstChoice == 1){ //if want to add member
+            int secondChoice = UserInputUtil.getIntInput("Enter 1 to create new member and add to Swim Team \nEnter 2 to add existing member to Swim Team","Invalid Choice", 1,2);
+            if(secondChoice == 1){ //if want to create and add new member
+                Member newMember = MemberUI.createMember();
+                MemberRepository.saveMember(newMember); //save member to UserFile
+                System.out.println("Member created and saved to file");
+                teamToEdit.getSwimMemberList().add(newMember); //add member to SwimTeam object
+                System.out.println("member added to Swim Team");
+            } else { //if want to add existing member to Swim Team
+                ArrayList<Member> memberList = MemberRepository.getMemberList();
+                if (!memberList.isEmpty()) {
+                    Member selectedMember = UserInputUtil.selectObject(memberList);
+                    teamToEdit.getSwimMemberList().add(selectedMember);
+                    System.out.println("Member added to Swim Team");
+                } else {
+                    System.out.println("No Members currently exists in file, so unable to add any existing member");
+                }
+            }
+        } else { //if want to remove trainer from swim team
+            ArrayList<Member> thisTeamMemberList = teamToEdit.getSwimMemberList();
+            if (!thisTeamMemberList.isEmpty()) {
+                System.out.println("Select Member to remove: ");
+                Member chosenMember = UserInputUtil.selectObject(thisTeamMemberList);
+                teamToEdit.getSwimMemberList().remove(chosenMember);
+                System.out.println("Trainer succesfully removed from Swim Team");
+            } else {
+                System.out.println("Team Currently has no member to delete");
+            }
+        }
+    }
+
+    private static void editTrainersForSwimTeam(SwimTeam teamToEdit) {
+        int firstChoice = UserInputUtil.getIntInput("Enter 1 to add trainer \nEnter 2 to remove trainer","Invalid Choice",1,2);
+        if(firstChoice == 1){ //if want to add trainer
+            int secondChoice = UserInputUtil.getIntInput("Enter 1 to create new trainer and add to Swim Team \nEnter 2 to add existing Trainer to Swim Team","Invalid Choice", 1,2);
+            if(secondChoice == 1){ //if want to create and add new trainer
+                Trainer newTrainer = TrainerMenu.createTrainer();
+                TrainerRepository.saveTrainerToUserList(newTrainer); //save Trainer to UserFile
+                System.out.println("Trainer created and saved to file");
+                teamToEdit.getSwimTrainerList().add(newTrainer); //add Trainer to SwimTeam object
+                SwimTeamRepository.updateSwimTeam(teamToEdit); //save changes to file
+                System.out.println("Trainer added to Swim Team");
+            } else { //if want to add existing trainer to Swim Team
+                ArrayList<Trainer> trainerList = TrainerMenu.getTrainerArrayList(UserRepository.getUserList());
+                if (!trainerList.isEmpty()) {
+                    Trainer selectedTrainer = UserInputUtil.selectObject(trainerList);
+                    teamToEdit.getSwimTrainerList().add(selectedTrainer);
+                    System.out.println("Trainer added to Swim Team");
+                } else {
+                    System.out.println("No trainers currently exists in file, so unable to add any existing trainer");
+                }
+            }
+        } else { //if want to remove trainer from swim team
+            ArrayList<Trainer> thisTeamTrainerList = teamToEdit.getSwimTrainerList();
+            if (!thisTeamTrainerList.isEmpty()) {
+                System.out.println("Select Trainer to remove: ");
+                Trainer chosenTrainer = UserInputUtil.selectObject(thisTeamTrainerList);
+                teamToEdit.getSwimTrainerList().remove(chosenTrainer);
+                System.out.println("Trainer succesfully removed from Swim Team");
+            } else {
+                System.out.println("Team Currently has no trainer to delete");
+            }
+        }
+    }
+
+    private static void deleteSwimTeam() {
+        ArrayList<SwimTeam> swimTeams = SwimTeamRepository.getSwimTeamList();
+        if(!swimTeams.isEmpty()){
+            SwimTeam choice = UserInputUtil.selectObject(swimTeams);
+            SwimTeamRepository.deleteSwimTeam(choice);
+        } else {
+            System.out.println("Currently there is no Swim Teams to delete");
+        }
+    }
+
+    private static void viewAllSwimTeams() {
+        ArrayList<SwimTeam> swimTeams = SwimTeamRepository.getSwimTeamList();
+        if (!swimTeams.isEmpty()) {
+            for(SwimTeam swimTeam : swimTeams){
+                System.out.println(swimTeam);
+            }
+        } else {
+            System.out.println("Currently there is no Swim Teams in the files");
+        }
+    }
 
     //Create Swim Team
     private static void registerTeam() {
@@ -66,7 +195,7 @@ public class SwimTeamUI {
             System.out.println("No Members was Added to the Swim Team yet, leaving Swim Team without Members for now");
         }
         SwimTeamRepository.saveSwimTeamToFile(newSwimTeam);
-
+        System.out.println("Swim Team succesfully saved to file \n" + newSwimTeam);
     }
     //Method to add Trainer to Swim Team, Does not save to file as that is up to the methods calling it
     public static void addTrainerToSwimTeam(SwimTeam swimTeam) {
@@ -84,6 +213,7 @@ public class SwimTeamUI {
             if(choice == 1) {
                 Trainer newTrainer = TrainerMenu.createTrainer();
                 swimTeam.getSwimTrainerList().add(newTrainer);
+                System.out.println("Trainer was added to Swim Team");
             } else {
                 System.out.println("No trainer was added to Swim Team");
             }

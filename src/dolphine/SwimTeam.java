@@ -19,6 +19,25 @@ public class SwimTeam implements Serializable {
         this.swimMemberList = swimMemberList;
         this.swimTrainerList = swimTrainerList;
     }
+
+    @Override
+    public String toString(){
+        StringBuilder membersFromArray = new StringBuilder();
+        for(Member member : swimMemberList){
+            membersFromArray.append(member + "\n");
+        }
+        StringBuilder trainersFromArray = new StringBuilder();
+        for(Trainer trainer : swimTrainerList){
+            trainersFromArray.append(trainer + "\n");
+        }
+        return "\nSwim Team: " + name + "\n" +
+                "ID: " + ID + "\n" +
+                "Member Type: " + memberType + "\n\n" +
+                "Trainers : \n" + trainersFromArray +
+                "Members : \n\n" + membersFromArray + "\n" +
+                "----- End of Swim Team -----\n";
+    }
+
     private static String generateId() { // private fordi den skal kun bruges her i klassen, man kan ikke calculate id ud fra klassen
         return UUID.randomUUID().toString();
     }
