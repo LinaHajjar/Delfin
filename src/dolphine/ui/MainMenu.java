@@ -10,8 +10,10 @@ public class MainMenu {
             System.out.println(" 2: Member");
             System.out.println(" 3: Trainer");
             System.out.println(" 4: Subscription");
+            System.out.println(" 5: Swim Teams");
+            System.out.println(" 6: Swim Competition");
             System.out.println(" 0: Close the program");
-            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 4", 0, 4);
+            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 4", 0, 5);
 
             switch (choice) {
                 case 0:
@@ -33,6 +35,11 @@ public class MainMenu {
                     SubscriptionUI.subscriptionMenu();
                     System.out.println("You chose option 4");
                     break;
+                case 5:
+                    SwimTeamUI.swimTeamMenu();
+                    break;
+                case 6:
+
                 default:
                 System.out.println("Wrong input");
                 break;
