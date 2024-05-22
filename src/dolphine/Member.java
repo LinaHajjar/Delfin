@@ -16,6 +16,7 @@ public class Member extends User {
     public Member(User user, boolean isActive) {
         super(user.getId(), user.getName(), user.getDateOfBirth(), user.getRole());
         this.isActive = isActive;
+        setMemberType();
     }
 
     public boolean getIsActive() {
