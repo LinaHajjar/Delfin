@@ -50,7 +50,7 @@ public class MemberUI {
         Member newMember = createMember();
         MemberRepository.saveMember(newMember);
         MemberRepository.addMember(newMember);
-        System.out.println("Member created successfully \n" + newMember+ "\n");
+        System.out.println("Member created successfully \n" + newMember + "\n");
     }
 
     //nyt member objekt,
@@ -64,23 +64,25 @@ public class MemberUI {
         Member newMember = new Member(user, isActive); //nyt member objekt oprettet med tilhørende informationer
         newMember.setMemberType();
         newMember.setActive(isActive); //medlemstatus aktiv/passiv
-            return newMember;
-        }
+        return newMember;
+    }
 
     public static void editMember() {
         System.out.println("Edit member");
         ArrayList<User> userList = getUserList(); //henter arraylisten
         Member memberToEdit = selectMember(userList);
-        System.out.println("Membership status is " + (memberToEdit.getIsActive() ? "active" : "inactive" ));
-        int choice = UserInputUtil.getIntInput("Enter 1 to set to active, or 2 to set inactive",  " Invalid choice", 1,2);
-        if (choice == 1){
+        System.out.println("Membership status is " + (memberToEdit.getIsActive() ? "active" : "inactive"));
+        int choice = UserInputUtil.getIntInput("Enter 1 to set to active, or 2 to set inactive", " Invalid choice", 1, 2);
+        if (choice == 1) {
             memberToEdit.setActive(true);
-        } if (choice == 2){
+        }
+        if (choice == 2) {
             memberToEdit.setActive(false);
         }
-        System.out.println("Membership status is now " + (memberToEdit.getIsActive() ? "active" : "inactive" ));
+        System.out.println("Membership status is now " + (memberToEdit.getIsActive() ? "active" : "inactive"));
         UserRepository.saveUserList(userList);
-        }
+    }
+
     private static Member selectMember(ArrayList<User> userList) {
         ArrayList<Member> memberList = getMemberArrayList(userList);
         Member memberChosen = null;
@@ -94,7 +96,7 @@ public class MemberUI {
     //Liste KUN af members
     private static ArrayList<Member> getMemberArrayList(ArrayList<User> userList) {
         ArrayList<Member> memberList = new ArrayList();
-        for (User user : userList){
+        for (User user : userList) {
             if (user instanceof Member) {
                 memberList.add((Member) user); //caster user med (member)
             }
@@ -109,5 +111,23 @@ public class MemberUI {
         userList.remove(memberToDelete);
         UserRepository.saveUserList(userList);
         System.out.println("Member successfully deleted.");
+    }
+
+    public static Member findMemberByName(){
+        boolean findingMember = false;
+        ArrayList<Member> memberArrayList;
+        do {
+            String name = UserInputUtil.getStringInput("Name of the member: ");
+            memberArrayList = MemberRepository.getMemberListByName(name);
+            if (memberArrayList.isEmpty()) {
+                System.out.println("Member not found");
+                findingMember = UserInputUtil.getStringInput("Try again? y/n", "Please write y or n", new String[]{"y", "n"}).equals("y");
+            }
+        } while (findingMember);
+        if (memberArrayList.isEmpty()) {
+            return null;
         }
+        System.out.println("Select Member");
+        return UserInputUtil.selectObject(memberArrayList);
+    }
 }

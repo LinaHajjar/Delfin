@@ -3,6 +3,7 @@ package dolphine;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class User implements Serializable {
@@ -11,6 +12,7 @@ public class User implements Serializable {
     private String name;
     private LocalDate dateOfBirth;
     private Role role;
+
 
     public User(String name, LocalDate dateOfBirth, Role role) {
         this.id = generateId();
@@ -72,6 +74,6 @@ public class User implements Serializable {
         return String.format("  Name: %s\n" +
                         "  Date of Birth: %s\n" +
                         "  Role: %s",
-                name, dateOfBirth, role);
+                name, dateOfBirth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")), role);
     }
 }
