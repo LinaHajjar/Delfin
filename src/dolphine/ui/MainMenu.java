@@ -13,7 +13,7 @@ public class MainMenu {
             System.out.println(" 5: Swim Team");
             System.out.println(" 6: Results");
             System.out.println(" 0: Close the program");
-            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 4", 0, 4);
+            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 6", 0, 6);
 
             switch (choice) {
                 case 0:
