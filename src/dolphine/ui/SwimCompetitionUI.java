@@ -1,17 +1,14 @@
 package dolphine.ui;
 
-import dolphine.CompetitionMember;
 import dolphine.SwimCompetition;
-import dolphine.SwimTeam;
 import dolphine.repository.SwimCompetitionRepository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SwimCompetitionUI {
     // hovedemenuen
-    public static void showMainMenu() {
+    public static void swimCompetitionMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Main Menu:");
