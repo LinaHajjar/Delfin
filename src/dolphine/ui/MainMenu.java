@@ -3,7 +3,7 @@ package dolphine.ui;
 import dolphine.util.UserInputUtil;
 
 public class MainMenu {
-    public static void HovedMenu(){
+    public static void HovedMenu() {
         int choice;
         do {
             System.out.println(" 1: User");
@@ -12,6 +12,7 @@ public class MainMenu {
             System.out.println(" 4: Subscription");
             System.out.println(" 5: Swim Teams");
             System.out.println(" 6: Swim Competition");
+            System.out.println(" 7: Competition member");
             System.out.println(" 0: Close the program");
             choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 4", 0, 5);
 
@@ -39,13 +40,16 @@ public class MainMenu {
                     SwimTeamUI.swimTeamMenu();
                     break;
                 case 6:
-
+                    SwimCompetitionUI.showMainMenu();
+                case 7:
+                    CompetitionMemberUI.MenuCompetitionMember();
+                    break;
                 default:
-                System.out.println("Wrong input");
-                break;
+                    System.out.println("Wrong input");
+                    break;
 
             }//end switch
-        }while (choice !=0);
+        } while (choice != 0);
 
     }//end of HovedMenu
 

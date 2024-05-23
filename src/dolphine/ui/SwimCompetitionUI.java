@@ -10,15 +10,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SwimCompetitionUI {
-    private static SwimTeam swimTeam;
-
-    public static void main(String[] args) {
-        swimTeam = new SwimTeam(new ArrayList<>(), new ArrayList<>()); // Initialize swimTeam with empty lists
-        showMainMenu();
-    }
-
     // hovedemenuen
-    private static void showMainMenu() {
+    public static void showMainMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Main Menu:");
@@ -50,7 +43,7 @@ public class SwimCompetitionUI {
 
         // opret konkurrence
     private static void opretKonkurrence() {
-        SwimCompetition competition = SwimCompetition.opretKonkurrence(swimTeam);
+        SwimCompetition competition = SwimCompetition.opretKonkurrence();
         SwimCompetitionRepository.createCompetition(competition);
         System.out.println("Competition created successfully.");
     }
@@ -85,7 +78,7 @@ public class SwimCompetitionUI {
         }
 
         SwimCompetition competition = competitions.get(index);
-        competition.editCompetition(swimTeam);
+        competition.editCompetition();
         SwimCompetitionRepository.updateCompetition(competition);
         System.out.println("Competition updated successfully.");
     }
