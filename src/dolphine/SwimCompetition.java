@@ -21,15 +21,14 @@ public class SwimCompetition implements Serializable {
         this.swimDisciplines = new ArrayList<>();
         this.participants = new ArrayList<>();
         this.category = category;
-
     }
-
 
         // SwimDiscipline filen tilføjes
     public void addSwimDiscipline(SwimDiscipline discipline) {
         swimDisciplines.add(discipline);
     }
-        // registrere medlemmernes category; juniór eller senior
+
+    //  Valg af kategori = junior eller senior
     public void registerParticipant(CompetitionMember participant) {
         if ((category.equals("Junior") && participant.getAge() < 18) ||
                 (category.equals("Senior") && participant.getAge() >= 18)) {
@@ -38,7 +37,8 @@ public class SwimCompetition implements Serializable {
             System.out.println("Participant does not match the competition category.");
         }
     }
-        // hovedemenuen for at oprette konkurrencen
+
+        // oprettelse af konkurrence
     public static SwimCompetition opretKonkurrence(SwimTeam swimTeam) {
         Scanner scanner = new Scanner(System.in);
 
@@ -53,13 +53,13 @@ public class SwimCompetition implements Serializable {
 
         SwimCompetition competition = new SwimCompetition(category, name, location, date);
 
+        // valg af disipliner
         System.out.println("➤ Select swim disciplines for the competition (enter 'done' when finished):");
         SwimDiscipline[] disciplines = SwimDiscipline.values();
         for (int i = 0; i < disciplines.length; i++) {
             System.out.println((i + 1) + ": " + disciplines[i]);
         }
 
-        // valg af disiplin
         while (true) {
             System.out.println("➤ Enter the number of the swim discipline:");
             String input = scanner.nextLine();
@@ -78,7 +78,7 @@ public class SwimCompetition implements Serializable {
             }
         }
 
-            // indtastes medlemmerne via SwimTeam filen
+        // valg af deltagerne
         System.out.println("➤ Enter participants for the competition (enter 'done' when finished):");
         while (true) {
             System.out.println("➤ Enter participant name:");
@@ -97,7 +97,7 @@ public class SwimCompetition implements Serializable {
         return competition;
     }
 
-    // redigere i sin valg
+    // redigere konkurrence
     public void editCompetition(SwimTeam swimTeam) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Editing competition: " + competitionName);
@@ -202,21 +202,27 @@ public class SwimCompetition implements Serializable {
         return category;
     }
 
-    public void setcompetitionName(String newName) {
+    public void setCompetitionName(String newName) {
+        this.competitionName = newName;
     }
 
-    public void setlocation(String newLocation) {
+    public void setLocation(String newLocation) {
+        this.location = newLocation;
     }
 
-    public void setdate(LocalDate parse) {
+    public void setDate(LocalDate newDate) {
+        this.date = newDate;
     }
 
-    public void setcategory(String newCategory) {
+    public void setCategory(String newCategory) {
+        this.category = newCategory;
     }
 
-    public void clearSwimDiscipline() {
+    public void clearSwimDisciplines() {
+        this.swimDisciplines.clear();
     }
 
-    public void clearparticipants() {
+    public void clearParticipants() {
+        this.participants.clear();
     }
 }

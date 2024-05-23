@@ -4,30 +4,77 @@ import dolphine.SwimCompetition;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SwimCompetitionRepository {
 
-    private static final String FILE_NAME = "src/dolphine/repository/competitions.ser";
+    private static final String filePath = "src/dolphine/repository/competitionFile.ser";
 
-    public static void saveCompetitions(List<SwimCompetition> competitions) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
-            oos.writeObject(competitions);
-            System.out.println("Competitions have been saved to file: " + FILE_NAME);
-        } catch (IOException e) {
-            System.out.println("An error occurred while saving competitions: " + e.getMessage());
+    // skriver konkurrence til en fil
+    public static void createCompetition(SwimCompetition competition) {
+        ArrayList<SwimCompetition> competitionList = getCompetitionList();
+        competitionList.add(competition);
+        saveCompetitionList(competitionList);
+    }
+
+    // Opdatere konkurrence-listen
+    public static void updateCompetition(SwimCompetition updatedCompetition) {
+        ArrayList<SwimCompetition> competitionList = getCompetitionList();
+        for (SwimCompetition sc : competitionList) {
+            if (sc.getCompetitionName().equals(updatedCompetition.getCompetitionName())) {
+                sc.setDate(updatedCompetition.getDate());
+                sc.setLocation(updatedCompetition.getLocation());
+                sc.clearSwimDisciplines();
+                sc.getSwimDisciplines().addAll(updatedCompetition.getSwimDisciplines());
+                sc.clearParticipants();
+                sc.getParticipants().addAll(updatedCompetition.getParticipants());
+                sc.setCategory(updatedCompetition.getCategory());
+            }
+        }
+        saveCompetitionList(competitionList);
+    }
+
+    public static void deleteCompetition(SwimCompetition competitionToDelete) {
+        ArrayList<SwimCompetition> competitionList = getCompetitionList();
+        competitionList.removeIf(sc -> sc.getCompetitionName().equals(competitionToDelete.getCompetitionName()));
+        saveCompetitionList(competitionList);
+    }
+
+    public static ArrayList<SwimCompetition> getCompetitionList() {
+        try {
+            File file = new File(filePath);
+
+            // Checker hvis filen er tom
+            if (file.length() == 0) {
+                return new ArrayList<>();
+            }
+            FileInputStream fileInputStream = new FileInputStream(file);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            ArrayList<SwimCompetition> loadedCompetitions = (ArrayList<SwimCompetition>) objectInputStream.readObject();
+            return loadedCompetitions;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
-    public static List<SwimCompetition> loadCompetitions() {
-        List<SwimCompetition> competitions = new ArrayList<>();
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
-            competitions = (List<SwimCompetition>) ois.readObject();
-            System.out.println("Competitions have been loaded from file: " + FILE_NAME);
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("An error occurred while loading competitions: " + e.getMessage());
+    // gemmer opdateringerne
+    public static void saveCompetitionList(ArrayList<SwimCompetition> competitionList) {
+        try {
+            ObjectOutputStream outPutStream = new ObjectOutputStream(new FileOutputStream(filePath));
+            outPutStream.writeObject(competitionList);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return competitions;
+    }
+
+    public static ArrayList<SwimCompetition> getCompetitionListByName(String name) {
+        ArrayList<SwimCompetition> competitionList = getCompetitionList();
+        ArrayList<SwimCompetition> competitionListByName = new ArrayList<>();
+        for (SwimCompetition sc : competitionList) {
+            if (sc.getCompetitionName().toLowerCase().contains(name.toLowerCase())) {
+                competitionListByName.add(sc);
+            }
+        }
+        return competitionListByName;
     }
 }
-
