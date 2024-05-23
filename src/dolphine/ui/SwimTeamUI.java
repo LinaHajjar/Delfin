@@ -121,14 +121,14 @@ public class SwimTeamUI {
         if(firstChoice == 1){ //if want to add trainer
             int secondChoice = UserInputUtil.getIntInput("Enter 1 to create new trainer and add to Swim Team \nEnter 2 to add existing Trainer to Swim Team","Invalid Choice", 1,2);
             if(secondChoice == 1){ //if want to create and add new trainer
-                Trainer newTrainer = TrainerMenu.createTrainer();
+                Trainer newTrainer = TrainerUI.createTrainer();
                 TrainerRepository.saveTrainerToUserList(newTrainer); //save Trainer to UserFile
                 System.out.println("Trainer created and saved to file");
                 teamToEdit.getSwimTrainerList().add(newTrainer); //add Trainer to SwimTeam object
                 SwimTeamRepository.updateSwimTeam(teamToEdit); //save changes to file
                 System.out.println("Trainer added to Swim Team");
             } else { //if want to add existing trainer to Swim Team
-                ArrayList<Trainer> trainerList = TrainerMenu.getTrainerArrayList(UserRepository.getUserList());
+                ArrayList<Trainer> trainerList = TrainerUI.getTrainerArrayList(UserRepository.getUserList());
                 if (!trainerList.isEmpty()) {
                     Trainer selectedTrainer = UserInputUtil.selectObject(trainerList);
                     teamToEdit.getSwimTrainerList().add(selectedTrainer);
@@ -200,7 +200,7 @@ public class SwimTeamUI {
     //Method to add Trainer to Swim Team, Does not save to file as that is up to the methods calling it
     public static void addTrainerToSwimTeam(SwimTeam swimTeam) {
         ArrayList<User> userArrayList = UserRepository.getUserList();
-        ArrayList<Trainer> trainerArrayListFromFile = TrainerMenu.getTrainerArrayList(userArrayList);
+        ArrayList<Trainer> trainerArrayListFromFile = TrainerUI.getTrainerArrayList(userArrayList);
         if (!trainerArrayListFromFile.isEmpty()) { //if Trainer exists, allow user to add 1 to SwimTeam
             System.out.println("Select a Trainer for the team ");
             Trainer swimTeamTrainer = UserInputUtil.selectObject(trainerArrayListFromFile);
@@ -211,7 +211,7 @@ public class SwimTeamUI {
             System.out.println("Enter 1 to create new trainer, 0 to not create new trainer");
             int choice = UserInputUtil.getIntInput("Input choice","Invalid choice", 0,1);
             if(choice == 1) {
-                Trainer newTrainer = TrainerMenu.createTrainer();
+                Trainer newTrainer = TrainerUI.createTrainer();
                 swimTeam.getSwimTrainerList().add(newTrainer);
                 System.out.println("Trainer was added to Swim Team");
             } else {

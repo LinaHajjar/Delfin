@@ -29,7 +29,7 @@ public class MainMenu {
                     break;
                 case 3:
                     System.out.println("You chose option 3");
-                    TrainerMenu.trainerSubMenu();
+                    TrainerUI.trainerSubMenu();
                     break;
                 case 4:
                     SubscriptionUI.subscriptionMenu();

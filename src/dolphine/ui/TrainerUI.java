@@ -1,16 +1,14 @@
 package dolphine.ui;
 
-import dolphine.Role;
 import dolphine.Trainer;
 import dolphine.User;
 import dolphine.repository.TrainerRepository;
 import dolphine.repository.UserRepository;
 import dolphine.util.UserInputUtil;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class TrainerMenu {
+public class TrainerUI {
 
     //trainer submenu for everything trainer related
     public static void trainerSubMenu(){
@@ -23,8 +21,7 @@ public class TrainerMenu {
             System.out.println("  type 3: Delete Trainer                       ");
             System.out.println("  type 4: View All Trainers                    ");
             System.out.println("  type 0: Go back                              ");
-            int[] choiceArray = new int[]{1,2,3,4,0};
-            choice = UserInputUtil.getIntInput("Input a number to select an option","Invalid Choice, try again",choiceArray);
+            choice = UserInputUtil.getIntInput("Input a number to select an option","Invalid Choice, try again",0,4);
             switch(choice){
                 case 1://register trainer
                     registerTrainer();

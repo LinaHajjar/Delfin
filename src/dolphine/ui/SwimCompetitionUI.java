@@ -15,7 +15,6 @@ public class SwimCompetitionUI {
     private static ArrayList<SwimCompetition> competitions = new ArrayList<>();
 
     public static void main(String[] args) {
-
         showMainMenu();
         editCompetition();
     }

@@ -25,11 +25,12 @@ public class SwimCompetition implements Serializable {
     }
 
 
-        // SwimDiscipline filen tilføjes
+    // SwimDiscipline filen tilføjes
     public void addSwimDiscipline(SwimDiscipline discipline) {
         swimDisciplines.add(discipline);
     }
-        // registrere medlemmernes category; juniór eller senior
+
+    // registrere medlemmernes category; juniór eller senior
     public void registerParticipant(CompetitionMember participant) {
         if ((category.equals("Junior") && participant.getAge() < 18) ||
                 (category.equals("Senior") && participant.getAge() >= 18)) {
@@ -38,7 +39,8 @@ public class SwimCompetition implements Serializable {
             System.out.println("Participant does not match the competition category.");
         }
     }
-        // hovedemenuen for at oprette konkurrencen
+
+    // hovedemenuen for at oprette konkurrencen
     public static SwimCompetition opretKonkurrence(SwimTeam swimTeam) {
         Scanner scanner = new Scanner(System.in);
 
@@ -78,7 +80,7 @@ public class SwimCompetition implements Serializable {
             }
         }
 
-            // indtastes medlemmerne via SwimTeam filen
+        // indtastes medlemmerne via SwimTeam filen
         System.out.println("➤ Enter participants for the competition (enter 'done' when finished):");
         while (true) {
             System.out.println("➤ Enter participant name:");

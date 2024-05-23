@@ -8,18 +8,18 @@ public class Trainer extends User implements Serializable {
     private static final long serialVersionUID = 1L;
     private int seniority;
 
-    public Trainer(String name, LocalDate dateOfBirth, Role role, int seniority){
-        super (name,dateOfBirth,role);
-        this.seniority=seniority;
+    public Trainer(String name, LocalDate dateOfBirth, Role role, int seniority) {
+        super(name, dateOfBirth, role);
+        this.seniority = seniority;
     }
 
-    public Trainer(User user, int seniority){
-        super(user.getId(), user.getName(),user.getDateOfBirth(),user.getRole());
+    public Trainer(User user, int seniority) {
+        super(user.getId(), user.getName(), user.getDateOfBirth(), user.getRole());
         this.seniority = seniority;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return super.toString() +
                 "\n  Senority: " + getSeniority() + "\n";
     }

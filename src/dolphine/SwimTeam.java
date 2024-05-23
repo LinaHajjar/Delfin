@@ -61,6 +61,7 @@ public class SwimTeam implements Serializable {
 
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
+    }
 
     public static Member findMemberByName(String name) {
         for (Member member : swimMemberList) {
