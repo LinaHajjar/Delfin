@@ -49,7 +49,6 @@ public class MemberUI {
     public static void saveAndCreateMember() {
         Member newMember = createMember();
         MemberRepository.saveMember(newMember);
-        MemberRepository.addMember(newMember);
         System.out.println("Member created successfully \n" + newMember + "\n");
     }
 

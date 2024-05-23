@@ -1,5 +1,10 @@
 package dolphine;
 
+import dolphine.repository.CompetitionMemberRepository;
+import dolphine.ui.CompetitionMemberUI;
+import dolphine.ui.SwimCompetitionUI;
+import dolphine.util.UserInputUtil;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,7 +44,7 @@ public class SwimCompetition implements Serializable {
     }
 
         // oprettelse af konkurrence
-    public static SwimCompetition opretKonkurrence(SwimTeam swimTeam) {
+    public static SwimCompetition opretKonkurrence() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("➤ Enter competition category (Junior/Senior):");
@@ -79,26 +84,19 @@ public class SwimCompetition implements Serializable {
         }
 
         // valg af deltagerne
-        System.out.println("➤ Enter participants for the competition (enter 'done' when finished):");
-        while (true) {
-            System.out.println("➤ Enter participant name:");
-            String nameInput = scanner.nextLine();
-            if (nameInput.equalsIgnoreCase("done")) {
-                break;
-            }
-            Member participant = swimTeam.findMemberByName(nameInput);
-            if (participant instanceof CompetitionMember) {
-                competition.registerParticipant((CompetitionMember) participant);
-            } else {
-                System.out.println("No competition member found with name: " + nameInput);
-            }
-        }
+        System.out.println("➤ Enter participants for the competition:");
+        boolean selectingParticipant;
+        do {
+            CompetitionMember participant = CompetitionMemberUI.findCompetitionMemberByName();
+            competition.registerParticipant(participant);
+            selectingParticipant = UserInputUtil.getStringInput("Select more participants? y/n :", "Select y/n please", new String[]{"y","n"}).equalsIgnoreCase("y");
+        } while (selectingParticipant);
 
         return competition;
     }
 
     // redigere konkurrence
-    public void editCompetition(SwimTeam swimTeam) {
+    public void editCompetition() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Editing competition: " + competitionName);
 
@@ -166,7 +164,7 @@ public class SwimCompetition implements Serializable {
                 if (nameInput.equalsIgnoreCase("done")) {
                     break;
                 }
-                Member participant = swimTeam.findMemberByName(nameInput);
+                CompetitionMember participant = CompetitionMemberUI.findCompetitionMemberByName();
                 if (participant instanceof CompetitionMember) {
                     registerParticipant((CompetitionMember) participant);
                 } else {

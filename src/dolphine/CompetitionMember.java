@@ -10,6 +10,10 @@ public class CompetitionMember extends Member {
         super(name, dateOfBirth, role, isActive);
         this.disciplineList = disciplineList;
     }
+    public CompetitionMember(Member member, ArrayList<SwimDiscipline> disciplineList) {
+        super(member.getName(), member.getDateOfBirth(), member.getRole(), member.getIsActive());
+        this.disciplineList = disciplineList;
+    }
 
     public ArrayList<SwimDiscipline> getDisciplineList() {
         return disciplineList;
