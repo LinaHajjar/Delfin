@@ -14,7 +14,7 @@ public class MainMenu {
             System.out.println(" 6: Swim Competition");
             System.out.println(" 7: Competition member");
             System.out.println(" 0: Close the program");
-            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 4", 0, 5);
+            choice = UserInputUtil.getIntInput("Enter the number from the list: ", "wrong input, choose a number between 0 and 7", 0, 7);
 
             switch (choice) {
                 case 0:
@@ -40,7 +40,8 @@ public class MainMenu {
                     SwimTeamUI.swimTeamMenu();
                     break;
                 case 6:
-                    SwimCompetitionUI.showMainMenu();
+                    SwimCompetitionUI.swimCompetitionMenu();
+                    break;
                 case 7:
                     CompetitionMemberUI.MenuCompetitionMember();
                     break;
