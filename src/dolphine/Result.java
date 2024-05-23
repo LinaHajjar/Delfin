@@ -14,5 +14,4 @@ public class Result {
         this.dateOfResult=dateOfResult;
         this.swimDiscipline=swimDiscipline;
     }
-
 }
