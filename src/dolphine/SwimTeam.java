@@ -16,6 +16,7 @@ public class SwimTeam implements Serializable {
         this.ID = generateId();
         this.name = name;
         this.memberType = memberType;
+
         this.swimMemberList = swimMemberList;
         this.swimTrainerList = swimTrainerList;
     }
@@ -60,12 +61,29 @@ public class SwimTeam implements Serializable {
 
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
+
+    public static Member findMemberByName(String name) {
+        for (Member member : swimMemberList) {
+            if (member.getName().equals(name)) {
+                return member;
+            }
+        }
+        return null;
+    }
+
+    public static Member findMemberById(String id) {
+        for (Member member : swimMemberList) {
+            if (member.getId().equals(id)) {
+                return member;
+            }
+        }
+        return null;
+
     }
 
     public ArrayList<Member> getSwimMemberList() {
         return swimMemberList;
     }
-
     public void setSwimMemberList(ArrayList<Member> swimMemberList) {
         this.swimMemberList = swimMemberList;
     }

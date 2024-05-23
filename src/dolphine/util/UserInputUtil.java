@@ -460,8 +460,5 @@ public class UserInputUtil {
         } while (date == null);
         return date;
     }
-
-    public static boolean getBooleanInput(String s) {
-        return false;
-    }
+ 
 }

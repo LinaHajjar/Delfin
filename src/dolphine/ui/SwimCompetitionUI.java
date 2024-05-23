@@ -1,65 +1,74 @@
-package dolphine;
+package dolphine.ui;
 
-import java.io.Serializable;
+import dolphine.CompetitionMember;
+import dolphine.SwimCompetition;
+import dolphine.SwimDiscipline;
+import dolphine.SwimTeam;
+import dolphine.Member;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class SwimCompetition implements Serializable {
+public class SwimCompetitionUI {
+    private static SwimTeam swimTeam = new SwimTeam(new ArrayList<>(), new ArrayList<>());
+    private static ArrayList<SwimCompetition> competitions = new ArrayList<>();
 
-    private LocalDate date;
-    private String competitionName;
-    private String location;
-    private ArrayList<SwimDiscipline> swimDisciplines;
-    private ArrayList<CompetitionMember> participants;
-    private String category;
+    public static void main(String[] args) {
 
-    public SwimCompetition(String category, String competitionName, String location, LocalDate date) {
-        this.date = date;
-        this.competitionName = competitionName;
-        this.location = location;
-        this.swimDisciplines = new ArrayList<>();
-        this.participants = new ArrayList<>();
-        this.category = category;
-
+        showMainMenu();
+        editCompetition();
     }
 
 
-        // SwimDiscipline filen tilføjes
-    public void addSwimDiscipline(SwimDiscipline discipline) {
-        swimDisciplines.add(discipline);
-    }
-        // registrere medlemmernes category; juniór eller senior
-    public void registerParticipant(CompetitionMember participant) {
-        if ((category.equals("Junior") && participant.getAge() < 18) ||
-                (category.equals("Senior") && participant.getAge() >= 18)) {
-            participants.add(participant);
-        } else {
-            System.out.println("Participant does not match the competition category.");
+
+    private static void showMainMenu() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Main Menu:");
+            System.out.println("1. Create Competition");
+            System.out.println("2. Edit Competition");
+            System.out.println("3. Exit");
+            System.out.print("Select an option: ");
+
+            String choice = scanner.nextLine();
+            switch (choice) {
+                case "1":
+                    createCompetition();
+                    break;
+                case "2":
+                    editCompetition();
+                    break;
+                case "3":
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
         }
     }
-        // hovedemenuen for at oprette konkurrencen
-    public static SwimCompetition opretKonkurrence(SwimTeam swimTeam) {
+
+    private static void createCompetition() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("➤ Enter competition category (Junior/Senior):");
         String category = scanner.nextLine();
-        System.out.println("➤ Enter the competition name:");
-        String name = scanner.nextLine();
+        System.out.println("➤ Enter competition name:");
+        String competitionName = scanner.nextLine();
         System.out.println("➤ Enter competition location:");
         String location = scanner.nextLine();
         System.out.println("➤ Enter competition date (YYYY-MM-DD):");
         LocalDate date = LocalDate.parse(scanner.nextLine());
 
-        SwimCompetition competition = new SwimCompetition(category, name, location, date);
+        SwimCompetition competition = new SwimCompetition(category, competitionName, location, date);
 
+        // Select swim disciplines
         System.out.println("➤ Select swim disciplines for the competition (enter 'done' when finished):");
         SwimDiscipline[] disciplines = SwimDiscipline.values();
         for (int i = 0; i < disciplines.length; i++) {
             System.out.println((i + 1) + ": " + disciplines[i]);
         }
 
-        // valg af disiplin
         while (true) {
             System.out.println("➤ Enter the number of the swim discipline:");
             String input = scanner.nextLine();
@@ -78,58 +87,83 @@ public class SwimCompetition implements Serializable {
             }
         }
 
-            // indtastes medlemmerne via SwimTeam filen
+        // Add participants
         System.out.println("➤ Enter participants for the competition (enter 'done' when finished):");
         while (true) {
             System.out.println("➤ Enter participant name:");
-            String nameInput = scanner.nextLine();
-            if (nameInput.equalsIgnoreCase("done")) {
+            String participantName = scanner.nextLine();
+            if (participantName.equalsIgnoreCase("done")) {
                 break;
             }
-            Member participant = swimTeam.findMemberByName(nameInput);
-            if (participant instanceof CompetitionMember) {
-                competition.registerParticipant((CompetitionMember) participant);
+            Member member = swimTeam.findMemberByName(participantName);
+            if (member instanceof CompetitionMember) {
+                competition.registerParticipant((CompetitionMember) member);
             } else {
-                System.out.println("No competition member found with name: " + nameInput);
+                System.out.println("No competition member found with name: " + participantName);
             }
         }
 
-        return competition;
+        competitions.add(competition);
+
+        // Print competition details
+        System.out.println("Competition created successfully!");
+        System.out.println("Name: " + competition.getCompetitionName());
+        System.out.println("Location: " + competition.getLocation());
+        System.out.println("Date: " + competition.getDate());
+        System.out.println("Category: " + category);
+        System.out.println("Disciplines: " + competition.getSwimDisciplines());
+        System.out.println("Participants: " + competition.getParticipants());
     }
 
-    // redigere i sin valg
-    public void editCompetition(SwimTeam swimTeam) {
+    private static void editCompetition() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Editing competition: " + competitionName);
+
+        System.out.println("Enter the name of the competition you want to edit:");
+        String competitionName = scanner.nextLine();
+        SwimCompetition competition = null;
+
+        for (SwimCompetition comp : competitions) {
+            if (comp.getCompetitionName().equalsIgnoreCase(competitionName)) {
+                competition = comp;
+                break;
+            }
+        }
+
+        if (competition == null) {
+            System.out.println("Competition not found.");
+            return;
+        }
+
+        System.out.println("Editing competition: " + competition.getCompetitionName());
 
         System.out.println("Enter new competition name (or press Enter to keep current name):");
         String newName = scanner.nextLine();
         if (!newName.isEmpty()) {
-            competitionName = newName;
+            competition.setcompetitionName(newName);
         }
 
         System.out.println("Enter new competition location (or press Enter to keep current location):");
         String newLocation = scanner.nextLine();
         if (!newLocation.isEmpty()) {
-            location = newLocation;
+            competition.setlocation(newLocation);
         }
 
         System.out.println("Enter new competition date (YYYY-MM-DD) (or press Enter to keep current date):");
         String newDate = scanner.nextLine();
         if (!newDate.isEmpty()) {
-            date = LocalDate.parse(newDate);
+            competition.setdate(LocalDate.parse(newDate));
         }
 
         System.out.println("Enter new competition category (Junior/Senior) (or press Enter to keep current category):");
         String newCategory = scanner.nextLine();
         if (!newCategory.isEmpty()) {
-            category = newCategory;
+            competition.setcategory(newCategory);
         }
 
         System.out.println("Do you want to edit swim disciplines? (yes/no):");
         String editDisciplines = scanner.nextLine();
         if (editDisciplines.equalsIgnoreCase("yes")) {
-            swimDisciplines.clear();
+            competition.clearSwimDiscipline();
             System.out.println("Select swim disciplines for the competition (enter 'done' when finished):");
             SwimDiscipline[] disciplines = SwimDiscipline.values();
             for (int i = 0; i < disciplines.length; i++) {
@@ -145,7 +179,7 @@ public class SwimCompetition implements Serializable {
                 try {
                     int disciplineIndex = Integer.parseInt(input) - 1;
                     if (disciplineIndex >= 0 && disciplineIndex < disciplines.length) {
-                        swimDisciplines.add(disciplines[disciplineIndex]);
+                        competition.addSwimDiscipline(disciplines[disciplineIndex]);
                     } else {
                         System.out.println("Invalid number. Please select a valid discipline number.");
                     }
@@ -158,65 +192,24 @@ public class SwimCompetition implements Serializable {
         System.out.println("Do you want to edit participants? (yes/no):");
         String editParticipants = scanner.nextLine();
         if (editParticipants.equalsIgnoreCase("yes")) {
-            participants.clear();
+            competition.clearparticipants();
             System.out.println("Enter participants for the competition (enter 'done' when finished):");
             while (true) {
                 System.out.println("Enter participant name:");
-                String nameInput = scanner.nextLine();
-                if (nameInput.equalsIgnoreCase("done")) {
+                String participantName = scanner.nextLine();
+                if (participantName.equalsIgnoreCase("done")) {
                     break;
                 }
-                Member participant = swimTeam.findMemberByName(nameInput);
-                if (participant instanceof CompetitionMember) {
-                    registerParticipant((CompetitionMember) participant);
+                Member member = swimTeam.findMemberByName(participantName);
+                if (member instanceof CompetitionMember) {
+                    competition.registerParticipant((CompetitionMember) member);
                 } else {
-                    System.out.println("No competition member found with name: " + nameInput);
+                    System.out.println("No competition member found with name: " + participantName);
                 }
             }
         }
 
         System.out.println("Competition updated successfully.");
     }
-
-    public String getCompetitionName() {
-        return competitionName;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public ArrayList<SwimDiscipline> getSwimDisciplines() {
-        return swimDisciplines;
-    }
-
-    public ArrayList<CompetitionMember> getParticipants() {
-        return participants;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setcompetitionName(String newName) {
-    }
-
-    public void setlocation(String newLocation) {
-    }
-
-    public void setdate(LocalDate parse) {
-    }
-
-    public void setcategory(String newCategory) {
-    }
-
-    public void clearSwimDiscipline() {
-    }
-
-    public void clearparticipants() {
-    }
 }
+
