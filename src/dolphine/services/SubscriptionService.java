@@ -43,8 +43,6 @@ public class SubscriptionService {
         return memberFee * calculatePercentageOfYearUntilNextSeasonStart() / 100;
     }
 
-    // TODO Create calculate subscription left for season.
-
     public double calculateSubscriptionFeeAtNextSeason(Member member) {
         if (!member.getIsActive()) {
             // Inactive subscription fee
