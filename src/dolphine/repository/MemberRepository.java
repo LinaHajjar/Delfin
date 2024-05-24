@@ -6,18 +6,9 @@ import dolphine.User;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dolphine.repository.UserRepository.getUserList;
-
 public class MemberRepository {
-    public static List<Member> memberList = new ArrayList<>();
-
-    public static void addMember(Member member) {
-        memberList.add(member);
-        //saveMemberToFile(member);
-    }
-
     public static void saveMember(Member newMember) {
-        ArrayList<User> userList = getUserList();
+        ArrayList<User> userList = UserRepository.getUserList();
         userList.add(newMember); //tilføjer til den fælles userlist
         UserRepository.saveUserList(userList);
     }
@@ -36,7 +27,7 @@ public class MemberRepository {
 
 
     public static void showArrayList() {
-        ArrayList<User> userList = getUserList(); //henter arraylisten
+        ArrayList<User> userList = UserRepository.getUserList(); //henter arraylisten
         for (User user : userList) {
             if (user instanceof Member) {
                 System.out.println(user);
@@ -46,7 +37,7 @@ public class MemberRepository {
 
     public static ArrayList<Member> getMemberList(){
         ArrayList<Member> memberList = new ArrayList<>();
-        ArrayList<User> userList = getUserList();
+        ArrayList<User> userList = UserRepository.getUserList();
         if (userList == null){
             return memberList;
         }

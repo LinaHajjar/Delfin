@@ -75,7 +75,6 @@ public class SubscriptionServiceTest {
 
     @org.junit.jupiter.api.Test
     public void testGetUnpaidSubscriptionList() {
-        // TODO update to use subscriptions array instead.
         ArrayList<Subscription> subscriptionArrayList = new ArrayList<>();
         Member member1 = new Member("John", subscriptionService.getNextSeasonStartDate().minusYears(35), Role.COMPETITIONMEMBER, false);
         Member member2 = new Member("Alice", subscriptionService.getNextSeasonStartDate().minusYears(subscriptionService.getJuniorBreakPointAge() - 2), Role.COMPETITIONMEMBER, true);
