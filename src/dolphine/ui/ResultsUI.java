@@ -74,7 +74,7 @@ public class ResultsUI {
         ArrayList<CompetitionMember> competitionMemberArrayList;
         do {
             String name = UserInputUtil.getStringInput("Name of the member: ");
-            competitionMemberArrayList = CompetitionMemberRepository.getCompetitionMemberListByName(name);
+            competitionMemberArrayList = CompetitionMemberRepository.getCompetitionMemberByName(name);
             if (competitionMemberArrayList.isEmpty()) {
                 System.out.println("Member not found");
                 findingMember = UserInputUtil.getStringInput("Try again? y/n", "Please write y or n", new String[]{"y", "n"}).equals("y");
